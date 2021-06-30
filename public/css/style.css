@@ -44,7 +44,6 @@ nav{
 footer{
     height: 185px;
     padding-top: 15px;
-    margin-top: 500px;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.05);
 }
@@ -101,3 +100,5 @@ footer{
     color:rgba(250, 114, 2, 1);
     transition: 0.3s linear;
 }
+
+/*------------------------------------------------------- Login */

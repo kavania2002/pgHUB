@@ -1,12 +1,13 @@
 <%- include('header'); -%>
 
     <main>
-        <div id="main-features"></div>
+        <!-- <div id="main-features"></div> -->
         <div id="main-login">
-            <form>
-                <input type="email" placeholder="E-mail*" name="log-email" required>
-                <input type="password" placeholder="Password*" name="log-pwd" required>
-                <input type="submit">
+            <form id="login-form">
+                <h2>Login</h2>
+                <input type="email" class="login-feild" placeholder="E-mail*" name="log-email" required>
+                <input type="password" class="login-feild" placeholder="Password*" name="log-pwd" required>
+                <input type="submit" id="login-submit">
             </form>
         </div>
     </main>
