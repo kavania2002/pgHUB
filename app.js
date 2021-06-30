@@ -16,7 +16,7 @@ app.use(urlencoded({extended:true}));
 app.use(express.static(__dirname + "/public/"));
 
 
-app.get("/", function(req, res){
+app.get("/login", function(req, res){
     res.render("Login");
 });
 
