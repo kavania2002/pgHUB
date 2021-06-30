@@ -11,7 +11,7 @@ import mongoose from "mongoose";
 
 const app = express();
 
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 app.use(urlencoded({extended:true}));
 app.use(express.static(__dirname + "/public/"));
 
