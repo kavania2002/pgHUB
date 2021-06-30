@@ -4,7 +4,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 import express from "express";
-import { urlencoded } from "body-parser";
+import pkg from 'body-parser';
+const { urlencoded } = pkg;
 import ejs from "ejs";
 import mongoose from "mongoose";
 
@@ -16,7 +17,7 @@ app.use(express.static(__dirname + "/public/"));
 
 
 app.get("/", function(req, res){
-    res.render("index");
+    res.render("Login");
 });
 
 app.listen(3000, function(){
