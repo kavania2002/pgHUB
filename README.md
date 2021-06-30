@@ -1,3 +1,5 @@
 # pgHUB
 
-MAde with LOVE.
+### For contribution?
+
+- Fork and Clone Repository 
