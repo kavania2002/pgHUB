@@ -17,6 +17,7 @@ nav{
     font-size: 35px;
     margin-left: 35px;
     color: rgba(255, 255, 255, 0.979);
+    transition: 0.5s;
 }
 #nav-logo span{
     font-family:'Fira Sans', sans-serif;
@@ -24,6 +25,9 @@ nav{
     margin-left: 3px;
     color: rgba(255, 255, 255, 0.979);
     transition: 0.5s;
+}
+#nav-logo:hover span{
+    margin-left: 15px;
 }
 #nav-links a{
     font-family: 'Noto Sans', sans-serif;
@@ -56,6 +60,7 @@ footer{
     font-size: 45px;
     margin-left: 3px;
     color: rgba(250, 114, 2, 1);
+    transition: 0.5s;
 }
 #fo-des{
     color: #7c7a97;
