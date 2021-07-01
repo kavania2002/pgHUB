@@ -7,8 +7,29 @@
                 <h2>Login</h2>
                 <input type="email" class="login-feild" placeholder="E-mail*" name="log-email" required>
                 <input type="password" class="login-feild" placeholder="Password*" name="log-pwd" required>
-                <input type="submit" id="login-submit">
+                <div style="display: inline;"><input type="submit" id="login-submit">
+                <button id="login-submit" onclick="openSignup()">Sign Up</button></div>
             </form>
-        </div>
+        </div>    
+            <div id="main-signup">
+                <form id="signup-form">
+                    <h2>Sign up</h2>
+                <input type="text" class="login-feild" placeholder="Name*" name="signup-name" required>
+                <input type="email" class="login-feild" placeholder="E-mail*" name="signup-email" required>
+                <input type="password" class="login-feild" placeholder="Password*" name="signup-pwd" required>
+                <div style="display: inline;"><input type="submit" id="login-submit">
+                <button id="login-submit" onclick="openLogin()">Login</button></div>
+                </form>
+            </div>
     </main>
+    <script>
+        function openSignup(){
+            document.getElementById("main-signup").style.display = "flex";
+            document.getElementById("main-login").style.display = "none";
+        }
+        function openLogin(){
+            document.getElementById("main-signup").style.display = "none";
+            document.getElementById("main-login").style.display = "flex";
+        }
+    </script>
     <%- include('footer'); -%>
