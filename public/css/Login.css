@@ -73,6 +73,7 @@ body{
     display: none;
     justify-content: center;
     align-content: center;
+    transition: 0.3s;
 }
 #signup-form{
     height: 450px;

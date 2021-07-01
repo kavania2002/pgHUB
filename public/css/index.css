@@ -1,0 +1,81 @@
+#profile{
+    height: 300px;
+    width: 75%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: rgba(0, 0, 0, 0.068);
+    box-shadow: 15px 15px 10px rgba(0, 0, 0, 0.5);
+    transform: translateX(130px);
+    margin-bottom: 30px;
+    margin-top: 20px;
+    border-radius: 50px;
+    padding-top: 15px;
+}
+#stats{
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 20px;
+    margin-left: 35px;
+}
+#per-stats{
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 20px;
+    margin-left: 35px;
+    color: rgba(250, 114, 2, 1);;
+}
+#user-ratings{
+    background-color: rgba(250, 114, 2, 1);
+    height: 500px;
+    padding-top: 20px;
+}
+#rat-logo{
+    font-family: 'Yellowtail', cursive;
+    font-size: 55px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.979);
+    transition: 0.5s;
+}
+#rat-logo span{
+    font-family:'Fira Sans', sans-serif;
+    font-size: 55px;
+    margin-left: 3px;
+    color: rgba(255, 255, 255, 0.979);
+    transition: 0.5s;
+}
+#rat{
+    /* height: 140px; */
+    width: 75%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-family: 'Noto Sans', sans-serif;
+    text-align: center;
+    justify-content: space-evenly;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 15px 15px 10px rgba(0, 0, 0, 0.5);
+    transform: translateX(130px);
+    margin-bottom: 30px;
+    margin-top: 20px;
+    border-radius: 50px;
+    padding-top: 15px;
+}
+#rat h4{
+    text-align: start;
+    margin-left: 95px;
+    font-size: 25px;
+    margin-bottom: 5px;
+}
+#rating{
+    height: 70px;
+    width: 70px;
+    border-radius: 70px;
+    background-color: rgba(250, 114, 2, 1);
+    font-size: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    float: right;
+    transform: translate(-100px, -75px);
+}
