@@ -100,4 +100,12 @@ footer{
     color:rgba(250, 114, 2, 1);
     transition: 0.3s linear;
 }
-
+#copyright{
+    font-family: 'Noto Sans', sans-serif;
+    color: rgba(250, 114, 2, 0.9);
+    width: 40%;
+    margin-top: 10px;
+    margin-left: 100px;
+    border-top: 2px solid #b9b9b9;
+    text-align: center;
+}
