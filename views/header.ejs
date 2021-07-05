@@ -23,6 +23,11 @@
         <div id="nav-logo">pg<span>HUB</div>
         <div id="nav-links">
             <a href="#">About Us</a>
-            <a href="/login">Login</a>
+
+            <% if (meUser == -1) { %>
+                <a href="/login">Login</a>
+            <% } else { %>
+                <a href="/user/<%= meUser %>"><%= meUser %></a> 
+            <% } %> 
         </div>
     </nav>

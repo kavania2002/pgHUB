@@ -39,6 +39,7 @@ const userSchema = new mongoose.Schema({
     password: String,
     location: String,
     totalRatings: Number,
+    age: Number,
     googleId: String
 });
 
@@ -62,8 +63,13 @@ passport.deserializeUser(function (id, done) {
 
 
 app.get("/login", function (req, res) {
-    res.render("login", { message: message });
-    message = "";
+
+    if (req.isAuthenticated()) {
+        res.redirect("/user/" + req.user.username);
+    } else {
+        res.render("login", { message: message, meUser : -1 });
+        message = "";
+    }
 });
 
 app.post("/login", function (req, res) {
@@ -71,12 +77,10 @@ app.post("/login", function (req, res) {
         username: req.body.username,
         password: req.body.password
     });
-    console.log(newUser);
     req.login(newUser, function (err) {
         if (err) {
             console.log(err);
             message = err.toString().split(":")[1].trim();
-            console.log(message);
             res.redirect("/login");
         } else {
             passport.authenticate("local")(req, res, function () {
@@ -91,31 +95,34 @@ app.post("/register", function (req, res) {
         if (err) {
             console.log(err);
             message = err.toString().split(":")[1].trim();
-            console.log(message);
             res.redirect("/login");
         } else {
             passport.authenticate("local")(req, res, function () {
                 // res.send("Succesfully logged in");
-                res.redirect("/user/" + req.user.name);
+                User.findOneAndUpdate({ username: user.username }, { location: "No Idea", totalRatings: 0, age: 0 }, function (err) {
+                    if (err) console.log(err);
+                });
+                res.redirect("/user/" + req.user.username);
             });
         }
     });
-
 });
 
 app.get("/user/:name", function (req, res) {
     const userName = req.params.name;
+    var meUser;
     User.findOne({ username: userName }, function (err, user) {
         if (err) {
             console.log(err);
         } else {
-            if (user){
-                console.log(user);
-                res.render("user", { user: user });
+            if (user) {
+                if (req.isAuthenticated()) meUser = req.user.username;
+                else meUser = -1;
+                res.render("user", { user: user, meUser: meUser });
             } else {
                 message = "Couldn't find user";
                 res.redirect("/login");
-            } 
+            }
         }
     });
 });
