@@ -3,24 +3,25 @@
     <main>
         <!-- <div id="main-features"></div> -->
         <div id="main-login">
-            <form id="login-form">
+            <form id="login-form" method="POST", action="/login">
                 <h2>Login</h2>
-                <input type="email" class="login-feild" placeholder="E-mail*" name="log-email" required>
-                <input type="password" class="login-feild" placeholder="Password*" name="log-pwd" required>
+                <input type="email" class="login-feild" placeholder="E-mail*" name="username" required>
+                <input type="password" class="login-feild" placeholder="Password*" name="password" required>
                 <div style="display: inline;"><input type="submit" id="login-submit">
                     <button id="login-submit" onclick="openSignup()">Sign Up</button>
                 </div>
+                <label><%= message %> </label>
             </form>
         </div>
         <div id="main-signup">
-            <form id="signup-form">
+            <form id="signup-form" method="POST", action="/register">
                 <h2>Sign up</h2>
-                <input type="text" class="login-feild" placeholder="Name*" name="signup-name" required>
-                <input type="email" class="login-feild" placeholder="E-mail*" name="signup-email" required>
-                <input type="password" class="login-feild" placeholder="Password*" name="signup-pwd" required>
+                <input type="email" class="login-feild" placeholder="E-mail*" name="username" required>
+                <input type="password" class="login-feild" placeholder="Password*" name="password" required>
                 <div style="display: inline;"><input type="submit" id="login-submit">
                     <button id="login-submit" onclick="openLogin()">Login</button>
                 </div>
+                <label><%= message %> </label>
             </form>
         </div>
     </main>
