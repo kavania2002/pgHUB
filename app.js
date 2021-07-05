@@ -12,14 +12,21 @@ import mongoose from "mongoose";
 const app = express();
 
 app.set("view engine", "ejs");
-app.use(urlencoded({extended:true}));
+app.use(urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public/"));
 
+mongoose.connect("http://localhost:127017/pgHUB", { useCreateIndex: true, useUnifiedTopology: true, useNewUrlParser: true });
 
-app.get("/", function(req, res){
+
+app.get("/login", function (req, res) {
     res.render("login");
 });
 
-app.listen(3000, function(){
+app.get("/user/:name", function (req, res) {
+    const userName = req.params.name;
+
+});
+
+app.listen(3000, function () {
     console.log("Server started at port 3000");
 });
