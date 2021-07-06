@@ -90,6 +90,15 @@ app.post("/login", function (req, res) {
     });
 });
 
+app.get("/register", function(req, res){
+    if (req.isAuthenticated()) {
+        res.redirect("/user/" + req.user.username);
+    } else {
+        res.render("register", { message: message, meUser : -1 });
+        message = "";
+    }
+});
+
 app.post("/register", function (req, res) {
     User.register({ username: req.body.username }, req.body.password, function (err, user) {
         if (err) {
