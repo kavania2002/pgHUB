@@ -1,4 +1,22 @@
 <%- include('header'); -%>
+    <div id="main-signup">
+        <form id="signup-form" method="POST" , action="/register">
+            <h2>Sign up</h2>
+            <div id="social-log">
+                <div id="social-logg"><a class="fa fa-facebook" href="#" id="fa-logg"></a>Facebook</div>
+                <div id="social-logg"><a class="fa fa-google" href="#" id="fa-logg"></a>Google</div>
+            </div>
+            <h5>OR</h5>
+            <input type="email" class="login-feild" placeholder="E-mail*" name="username" value="" required>
+            <input type="password" class="login-feild" placeholder="Password*" name="password" value=" " required>
+            <div style="display: inline;"><button type="submit" id="login-submit">
+        </form>
+        <button id="login-submit" href="/login">Login</button>
+    </div>
+    <label id="log-alert">
+        <%= message %>
+    </label>
 
+    </div>
 
-<%- include('footer'); -%>
+    <%- include('footer'); -%>

@@ -9,15 +9,15 @@ body{
     float: left;
 } */
 #main-login{
-    height: 490px;
+    height: 890px;
     width: 100%;
     display: flex;
     justify-content: center;
     align-content: center;
 }
 #login-form{
-    height: 400px;
-    width: 500px;
+    height: 800px;
+    width: 700px;
     background-color: #fb8525;
     margin-top: 40px;
     display: flex;
@@ -90,4 +90,28 @@ body{
     border-radius: 40px;
     box-shadow: 15px 15px 10px rgba(0, 0, 0, 0.3);
     transition: 0.3s;
+}
+#social-log{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+#social-logg{
+    margin-left: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.5);
+    transition: 0.5s;
+}
+#fa-logg {
+    font-size: 50px; text-decoration: none; color: rgba(0, 0, 0, 0.5); transition: 0.5s;
+}
+#fa-logg:hover{
+    color:rgb(255, 255, 255);
+    transition: 0.3s linear;
+}
+#social-logg:hover{
+    color:rgb(255, 255, 255);
+    transition: 0.3s linear;
 }

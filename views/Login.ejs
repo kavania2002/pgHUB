@@ -3,29 +3,25 @@
     <main>
         <!-- <div id="main-features"></div> -->
         <div id="main-login">
-            <form id="login-form" method="POST", action="/login">
+            <form id="login-form" method="POST" , action="/login">
                 <h2>Login</h2>
+                <div id="social-log">
+                    <div id="social-logg"><a class="fa fa-facebook" href="#" id="fa-logg"></a>Facebook</div>
+                    <div id="social-logg"><a class="fa fa-google" href="#" id="fa-logg"></a>Google</div>
+                </div>
+                <h5>OR</h5>
                 <input type="email" class="login-feild" placeholder="E-mail*" name="username" required>
                 <input type="password" class="login-feild" placeholder="Password*" name="password" required>
-                <div style="display: inline;"><input type="submit" id="login-submit">
-                    <button id="login-submit" onclick="openSignup()">Sign Up</button>
-                </div>
-                <label><%= message %> </label>
+                <div style="display: inline;"><button type="submit" id="login-submit">
             </form>
+            <button id="login-submit" href="/register">Sign Up</button>
         </div>
-        <div id="main-signup">
-            <form id="signup-form" method="POST", action="/register">
-                <h2>Sign up</h2>
-                <input type="email" class="login-feild" placeholder="E-mail*" name="username" required>
-                <input type="password" class="login-feild" placeholder="Password*" name="password" required>
-                <div style="display: inline;"><input type="submit" id="login-submit">
-                    <button id="login-submit" onclick="openLogin()">Login</button>
-                </div>
-                <label><%= message %> </label>
-            </form>
+        <label id="log-alert">
+            <%= message %>
+        </label>
         </div>
     </main>
-    <script>
+    <!-- <script>
         function openSignup() {
             document.getElementById("main-signup").style.display = "flex";
             document.getElementById("main-login").style.display = "none";
@@ -34,5 +30,5 @@
             document.getElementById("main-signup").style.display = "none";
             document.getElementById("main-login").style.display = "flex";
         }
-    </script>
+    </script> -->
     <%- include('footer'); -%>
