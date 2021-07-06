@@ -15,6 +15,7 @@ import passport from "passport";
 import session from "express-session";
 import passportLocalMongoose from "passport-local-mongoose";
 import { Strategy } from "passport-google-oauth20";
+import facebook from "passport-facebook";
 
 const app = express();
 
@@ -40,7 +41,8 @@ const userSchema = new mongoose.Schema({
     location: String,
     totalRatings: Number,
     age: Number,
-    googleId: String
+    googleId: String,
+    facebookId: String,
 });
 
 var message = "";
@@ -61,13 +63,106 @@ passport.deserializeUser(function (id, done) {
     });
 });
 
+// ------------------- Google Strategy --------------------
+passport.use(new Strategy({
+    clientID: process.env.GCLIENT_ID,
+    clientSecret: process.env.GCLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/google/pgHUB",
+    userProfileURL: "https://www.googleapis.com/oauth2/v2/userinfo"
+},
+    function (accessToken, refreshToken, profile, done) {
+        console.log(profile);
+        const data = profile._json;
+        User.findOne({ "googleId": data.id }, function (err, user) {
+            if (err) return done(err);
+
+            if (!user) {
+                user = new User({
+                    username: data.email,
+                    location: "No Idea",
+                    totalRatings: 0,
+                    age: 0,
+                    googleId: data.id
+                });
+                user.save(function (err) {
+                    if (err) console.log(err);
+                    return done(err, user);
+                });
+            } else {
+                return done(err, user);
+            }
+        });
+    }
+));
+
+// ----------------- Facebook Strategy --------------------
+passport.use(new facebook.Strategy({
+    clientID: process.env.FACEBOOK_APP_ID,
+    clientSecret: process.env.FACEBOOK_APP_SECRET,
+    callbackURL: "http://localhost:3000/auth/facebook/pgHUB"
+},
+    function (accessToken, refreshToken, profile, done) {
+        User.findOne({"facebookId":profile.id}, function(err, user){
+            if (err) return done(err);
+
+            if (!user){
+                user = new User({
+                    username: profile.displayName.split(" ")[0],
+                    location: "No Idea",
+                    totalRatings: 0,
+                    age: 0,
+                    facebookId: profile.id
+                });
+                user.save(function (err){
+                    if (err) console.log(err);
+                    return done(err, user);
+                })
+            } else {
+                return done(err, user);
+            }
+        });
+    }
+));
+
+// -------------------- Routings ----------------------------
+
+app.get("/", function (req, res) {
+    res.redirect("/login");
+});
+
+// -------------- Google oAuth Routings ------------------------------
+app.get("/auth/google",
+    passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+app.get("/auth/google/pgHUB",
+    passport.authenticate("google", { failureRedirect: "/login" }),
+    function (req, res) {
+        res.redirect("/user/" + req.user.username);
+    }
+);
+// -------------------------------------------------------------------
+
+// ------------------- Facebook oAuth Routings -----------------------
+app.get('/auth/facebook',
+    passport.authenticate('facebook', { scope: ["email"] }),
+    function(req, res) {}
+);
+
+app.get('/auth/facebook/pgHUB',
+    passport.authenticate('facebook', { failureRedirect: '/login' }),
+    function (req, res) {
+        // Successful authentication, redirect home.
+        res.redirect('/');
+    });
+
 
 app.get("/login", function (req, res) {
 
     if (req.isAuthenticated()) {
         res.redirect("/user/" + req.user.username);
     } else {
-        res.render("login", { message: message, meUser : -1 });
+        res.render("login", { message: message, meUser: -1 });
         message = "";
     }
 });
@@ -90,11 +185,11 @@ app.post("/login", function (req, res) {
     });
 });
 
-app.get("/register", function(req, res){
+app.get("/register", function (req, res) {
     if (req.isAuthenticated()) {
         res.redirect("/user/" + req.user.username);
     } else {
-        res.render("register", { message: message, meUser : -1 });
+        res.render("register", { message: message, meUser: -1 });
         message = "";
     }
 });
@@ -119,23 +214,30 @@ app.post("/register", function (req, res) {
 
 app.get("/user/:name", function (req, res) {
     const userName = req.params.name;
+    console.log(userName);
     var meUser;
     User.findOne({ username: userName }, function (err, user) {
+        console.log(user);
         if (err) {
             console.log(err);
         } else {
-            if (user) {
+            if (user != null) {
                 if (req.isAuthenticated()) meUser = req.user.username;
                 else meUser = -1;
                 res.render("user", { user: user, meUser: meUser });
             } else {
                 message = "Couldn't find user";
                 res.redirect("/login");
+                message = "";
             }
         }
     });
 });
 
+app.get("/logout", function (req, res) {
+    req.logout();
+    res.redirect("/login");
+});
 
 app.listen(3000, function () {
     console.log("Server started at port 3000");

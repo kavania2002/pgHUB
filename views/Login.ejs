@@ -1,24 +1,25 @@
-<%- include('header'); -%>
+<%- include('header'); %>
 
     <main>
         <!-- <div id="main-features"></div> -->
         <div id="main-login">
-            <form id="login-form" method="POST" , action="/login">
+            <form id="login-form" method="POST" action="/login">
                 <h2>Login</h2>
                 <div id="social-log">
-                    <div id="social-logg"><a class="fa fa-facebook" href="#" id="fa-logg"></a>Facebook</div>
-                    <div id="social-logg"><a class="fa fa-google" href="#" id="fa-logg"></a>Google</div>
+                    <div id="social-logg"><a class="fa fa-facebook" href="/auth/facebook" id="fa-logg">Facebook</a></div>
+                    <div id="social-logg"><a class="fa fa-google" href="/auth/google" id="fa-logg">Google</a></div>
                 </div>
                 <h5>OR</h5>
                 <input type="email" class="login-feild" placeholder="E-mail*" name="username" required>
                 <input type="password" class="login-feild" placeholder="Password*" name="password" required>
-                <div style="display: inline;"><button type="submit" id="login-submit">
+                <div style="display: inline;">
+                    <button type="submit" id="login-submit">
+                </div>
             </form>
-            <button id="login-submit" href="/register">Sign Up</button>
-        </div>
-        <label id="log-alert">
-            <%= message %>
-        </label>
+            <a id="login-submit" href="/register">Sign Up</a>
+            <label id="log-alert">
+                <%= message %>
+            </label>
         </div>
     </main>
     <!-- <script>

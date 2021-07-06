@@ -68,18 +68,17 @@ body{
     color: #fb8525;
 }
 #main-signup{
-    height: 490px;
+    height: 890px;
     width: 100%;
-    display: none;
+    display: flex;
     justify-content: center;
     align-content: center;
-    transition: 0.3s;
 }
 #signup-form{
-    height: 450px;
-    width: 500px;
+    height: 800px;
+    width: 700px;
     background-color: #fb8525;
-    margin-top: 20px;
+    margin-top: 40px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;

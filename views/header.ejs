@@ -24,10 +24,13 @@
         <div id="nav-links">
             <a href="#">About Us</a>
 
-            <% if (meUser == -1) { %>
+            <% if (meUser==-1) { %>
                 <a href="/login">Login</a>
-            <% } else { %>
-                <a href="/user/<%= meUser %>"><%= meUser %></a> 
-            <% } %> 
+                <% } else { %>
+                    <a href="/user/<%= meUser %>">
+                        <%= meUser %>
+                    </a>
+                    <a href="/logout">Logout</a>
+                    <% } %>
         </div>
     </nav>
