@@ -29,4 +29,19 @@
             document.getElementById("main-login").style.display = "flex";
         }
     </script> -->
+    <script>
+        if (navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(showPosition);
+        }
+
+        function showPosition(position){
+            console.log(position.coords.latitude + " " + position.coords.longitude);
+            sessionStorage.setItem("latitude", position.coords.latitude);
+            sessionStorage.setItem("longitude", position.coords.longitude);
+            const lat = "latitude="+position.coords.latitude;
+            const longi = "longitude="+position.coords.longitude;
+            document.cookie = lat;
+            document.cookie = longi;
+        }
+    </script>
     <%- include('footer'); -%>
