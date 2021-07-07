@@ -16,6 +16,7 @@ import session from "express-session";
 import passportLocalMongoose from "passport-local-mongoose";
 import { Strategy } from "passport-google-oauth20";
 import facebook from "passport-facebook";
+import alert from 'alert'
 
 const app = express();
 
@@ -102,10 +103,10 @@ passport.use(new facebook.Strategy({
     callbackURL: "http://localhost:3000/auth/facebook/pgHUB"
 },
     function (accessToken, refreshToken, profile, done) {
-        User.findOne({"facebookId":profile.id}, function(err, user){
+        User.findOne({ "facebookId": profile.id }, function (err, user) {
             if (err) return done(err);
 
-            if (!user){
+            if (!user) {
                 user = new User({
                     username: profile.displayName.split(" ")[0],
                     location: "No Idea",
@@ -113,7 +114,7 @@ passport.use(new facebook.Strategy({
                     age: 0,
                     facebookId: profile.id
                 });
-                user.save(function (err){
+                user.save(function (err) {
                     if (err) console.log(err);
                     return done(err, user);
                 })
@@ -146,7 +147,7 @@ app.get("/auth/google/pgHUB",
 // ------------------- Facebook oAuth Routings -----------------------
 app.get('/auth/facebook',
     passport.authenticate('facebook', { scope: ["email"] }),
-    function(req, res) {}
+    function (req, res) { }
 );
 
 app.get('/auth/facebook/pgHUB',
@@ -162,6 +163,9 @@ app.get("/login", function (req, res) {
     if (req.isAuthenticated()) {
         res.redirect("/user/" + req.user.username);
     } else {
+        if (message != "") {
+            alert(message);
+        }
         res.render("login", { message: message, meUser: -1 });
         message = "";
     }

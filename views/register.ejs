@@ -20,7 +20,9 @@
     </main>
     <script>
         function signPop(){
-            alert(<%= message %>);
+            const message = <%= message %>;
+            console.log(message);
+            alert(message);
         }
     </script>
     <%- include('footer'); -%>
