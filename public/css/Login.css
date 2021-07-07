@@ -9,7 +9,7 @@ body{
     float: left;
 } */
 #main-login{
-    height: 690px;
+    height: 890px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -17,7 +17,7 @@ body{
     /* align-content: center; */
 }
 #login-form{
-    height: 650px;
+    height: 800px;
     width: 700px;
     background-color: #fb8525;
     margin-top: 40px;
@@ -66,6 +66,7 @@ body{
     font-family: 'Noto Sans', sans-serif;
     font-size: 30px;
     margin-top: 20px;
+    margin-bottom: 20px;
     display: flex;
     align-self: center;
     align-items: center;
@@ -131,10 +132,10 @@ body{
     color:rgb(255, 255, 255);
     transition: 0.3s linear;
 }
-#log-alert{
+/* #log-alert{
     background-color: red;
     font-size: 19px;
     border-radius: 10px;
     margin-top: 5px;
     padding: 5px 5px;
-}
+} */
