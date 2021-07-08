@@ -12,17 +12,17 @@
                 <input type="email" class="login-feild" placeholder="E-mail*" name="username" required>
                 <input type="password" class="login-feild" placeholder="Password*" name="password" required>
                 <div style="display: inline;">
-                    <button type="submit" id="login-submit" onclick=signPop()>Signup</button>
+                    <button type="submit" id="login-submit">Signup</button>
                 </div>
             </form>
             <a id="login-submit" href="/login">Login</a>
         </div>
     </main>
-    <script>
+    <!-- <script>
         function signPop(){
             const message = <%= message %>;
             console.log(message);
             alert(message);
         }
-    </script>
+    </script> -->
     <%- include('footer'); -%>
