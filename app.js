@@ -213,7 +213,7 @@ app.post("/register", function (req, res) {
             get(url, function (response) {
                 response.on("data", function (data) {
                     const addressData = JSON.parse(data);
-                    var locality = addressData.data[0].locality;
+                    var locality = addressData.data[0].county;
                     passport.authenticate("local")(req, res, function () {
                         // res.send("Succesfully logged in");
                         console.log(locality);
