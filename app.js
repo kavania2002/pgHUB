@@ -208,6 +208,7 @@ app.post("/register", function (req, res) {
         } else {
             const lati = req.cookies["latitude"];
             const longi = req.cookies["longitude"];
+            // console.log(lati, longi);
             const url = "http://api.positionstack.com/v1/reverse?access_key=" + process.env.POSAPI_KEY + "&query=" + lati + "," + longi + "&limit=1";
             get(url, function (response) {
                 response.on("data", function (data) {
