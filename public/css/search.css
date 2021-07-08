@@ -1,0 +1,32 @@
+#search-page{
+    display: flex;
+    margin: 0px;
+    width: 100%;
+}
+#filters{
+    width:20%;
+    /* height: 500px; */
+    display: flex;
+    flex-direction: column;
+}
+#results{
+    width: 80%;
+    padding: 15px;
+    /* height: 500px; */
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: rgba(250, 114, 2, 1);
+}
+#item{
+    background-color: rgb(250, 114, 2, 1);
+    border-radius: 15px;
+    width: 30%;
+    margin-bottom: 5px;
+    padding: 15px;
+    transition: 0.5s;
+}
+#item:hover{
+    box-shadow: 2px 2px 1px #fff;
+}
