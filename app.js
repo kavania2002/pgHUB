@@ -250,8 +250,12 @@ app.get("/user/:name", function (req, res) {
     });
 });
 
-app.get("/search", function(req, res){
-    res.render("search");
+app.get("/search", function (req, res) {
+    if (req.isAuthenticated()) {
+        res.render("search", { meUser: req.user.username });
+    } else {
+        res.render("search", { meUser: -1 });
+    }
 });
 
 app.get("/logout", function (req, res) {
