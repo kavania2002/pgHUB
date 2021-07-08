@@ -26,8 +26,8 @@
 
         function showPosition(position){
             console.log(position.coords.latitude + " " + position.coords.longitude);
-            sessionStorage.setItem("latitude", position.coords.latitude);
-            sessionStorage.setItem("longitude", position.coords.longitude);
+            sessionStorage.setItem("latitude", position.coords.latitude.subString(10));
+            sessionStorage.setItem("longitude", position.coords.longitude.subString(10));
             const lat = "latitude="+position.coords.latitude;
             const longi = "longitude="+position.coords.longitude;
             document.cookie = lat;

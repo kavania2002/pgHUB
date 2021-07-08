@@ -208,7 +208,6 @@ app.post("/register", function (req, res) {
         } else {
             const lati = req.cookies["latitude"];
             const longi = req.cookies["longitude"];
-            // console.log(lati, longi);
             const url = "http://api.positionstack.com/v1/reverse?access_key=" + process.env.POSAPI_KEY + "&query=" + lati + "," + longi + "&limit=1";
             get(url, function (response) {
                 response.on("data", function (data) {
@@ -251,6 +250,10 @@ app.get("/user/:name", function (req, res) {
     });
 });
 
+app.get("/search", function(req, res){
+    res.render("search");
+});
+
 app.get("/logout", function (req, res) {
     req.logout();
     res.redirect("/login");
@@ -259,7 +262,3 @@ app.get("/logout", function (req, res) {
 app.listen(3000, function () {
     console.log("Server started at port 3000");
 });
-
-function getAdress(lati, longi) {
-
-};
