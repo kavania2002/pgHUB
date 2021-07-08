@@ -18,11 +18,19 @@
             <a id="login-submit" href="/login">Login</a>
         </div>
     </main>
-    <!-- <script>
-        function signPop(){
-            const message = <%= message %>;
-            console.log(message);
-            alert(message);
+    <script>
+        if (navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(showPosition);
+        }
+
+        function showPosition(position){
+            console.log(position.coords.latitude + " " + position.coords.longitude);
+            sessionStorage.setItem("latitude", position.coords.latitude);
+            sessionStorage.setItem("longitude", position.coords.longitude);
+            const lat = "latitude="+position.coords.latitude;
+            const longi = "longitude="+position.coords.longitude;
+            document.cookie = lat;
+            document.cookie = longi;
         }
     </script> -->
     <%- include('footer'); -%>

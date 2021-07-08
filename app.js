@@ -16,15 +16,17 @@ import session from "express-session";
 import passportLocalMongoose from "passport-local-mongoose";
 import { Strategy } from "passport-google-oauth20";
 import facebook from "passport-facebook";
-import alert from 'alert'
+import alert from 'alert';
+import cookieParser from "cookie-parser";
+import { get } from "http";
 
 const app = express();
 
 app.set("view engine", "ejs");
 app.use(urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public/"));
+app.use(cookieParser());
 
-console.log(process.env.SECRET);
 app.use(session({
     secret: process.env.SECRET,
     resave: false,
@@ -159,7 +161,6 @@ app.get('/auth/facebook/pgHUB',
 
 
 app.get("/login", function (req, res) {
-
     if (req.isAuthenticated()) {
         res.redirect("/user/" + req.user.username);
     } else {
@@ -205,12 +206,23 @@ app.post("/register", function (req, res) {
             message = err.toString().split(":")[1].trim();
             res.redirect("/login");
         } else {
-            passport.authenticate("local")(req, res, function () {
-                // res.send("Succesfully logged in");
-                User.findOneAndUpdate({ username: user.username }, { location: "No Idea", totalRatings: 0, age: 0 }, function (err) {
-                    if (err) console.log(err);
+            const lati = req.cookies["latitude"];
+            const longi = req.cookies["longitude"];
+            const url = "http://api.positionstack.com/v1/reverse?access_key=" + process.env.POSAPI_KEY + "&query=" + lati + "," + longi + "&limit=1";
+            get(url, function (response) {
+                response.on("data", function (data) {
+                    const addressData = JSON.parse(data);
+                    var locality = addressData.data[0].locality;
+                    // console.log("locality")
+                    passport.authenticate("local")(req, res, function () {
+                        // res.send("Succesfully logged in");
+                        console.log(locality);
+                        User.findOneAndUpdate({ username: user.username }, { location: locality, totalRatings: 0, age: 0 }, function (err) {
+                            if (err) console.log(err);
+                        });
+                        res.redirect("/user/" + req.user.username);
+                    });
                 });
-                res.redirect("/user/" + req.user.username);
             });
         }
     });
@@ -246,3 +258,7 @@ app.get("/logout", function (req, res) {
 app.listen(3000, function () {
     console.log("Server started at port 3000");
 });
+
+function getAdress(lati, longi) {
+
+};
