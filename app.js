@@ -290,6 +290,14 @@ app.get("/newpg", function(req, res){
     }
 });
 
+app.get("/pg", function(req, res){
+    if (req.isAuthenticated()) {
+        res.render("pg", { meUser: req.user.username });
+    } else {
+        res.render("pg", { meUser: -1 });
+    }
+}); 
+
 app.get("/logout", function (req, res) {
     req.logout();
     res.redirect("/login");
