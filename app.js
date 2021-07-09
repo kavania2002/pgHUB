@@ -283,7 +283,11 @@ app.get("/search", function (req, res) {
 });
 
 app.get("/newpg", function(req, res){
-    res.render("newpg");
+    if (req.isAuthenticated()) {
+        res.render("newpg", { meUser: req.user.username });
+    } else {
+        res.redirect("/login");
+    }
 });
 
 app.get("/logout", function (req, res) {
