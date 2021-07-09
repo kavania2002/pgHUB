@@ -10,7 +10,7 @@ import express from "express";
 import pkg from 'body-parser';
 const { urlencoded } = pkg;
 import ejs from "ejs";
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import passport from "passport";
 import session from "express-session";
 import passportLocalMongoose from "passport-local-mongoose";
@@ -47,16 +47,28 @@ const userSchema = new mongoose.Schema({
     googleId: String,
     facebookId: String,
     latitude: Number,
-    longitude: Number
+    longitude: Number,
+    commentIds: [String]
 });
 
 const pgSchema = new mongoose.Schema({
     name: String,
     email: String,
-    address: String,
+    latitude: Number,
+    longitude: Number,
     city: String,
     price: Number,
-    description: String 
+    veg: Boolean,
+    AC: Boolean,
+    photos: [String],
+    commentIds = [String]
+});
+
+const commentSchema = new mongoose.Schema({
+    content: String,
+    score: Number,
+    userId: String,
+    pgId: String
 });
 
 var message = "";
@@ -64,6 +76,8 @@ var message = "";
 userSchema.plugin(passportLocalMongoose);
 
 const User = new mongoose.model("User", userSchema);
+const Pg = new mongoose.model("Pg", pgSchema);
+const Comment = new mongoose.model("Comment", commentSchema);
 
 passport.use(User.createStrategy());
 
