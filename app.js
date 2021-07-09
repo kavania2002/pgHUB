@@ -10,7 +10,7 @@ import express from "express";
 import pkg from 'body-parser';
 const { urlencoded } = pkg;
 import ejs from "ejs";
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 import passport from "passport";
 import session from "express-session";
 import passportLocalMongoose from "passport-local-mongoose";
@@ -61,7 +61,7 @@ const pgSchema = new mongoose.Schema({
     veg: Boolean,
     AC: Boolean,
     photos: [String],
-    commentIds = [String]
+    commentIds: [String]
 });
 
 const commentSchema = new mongoose.Schema({
