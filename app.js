@@ -46,6 +46,17 @@ const userSchema = new mongoose.Schema({
     age: Number,
     googleId: String,
     facebookId: String,
+    latitude: Number,
+    longitude: Number
+});
+
+const pgSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    address: String,
+    city: String,
+    price: Number,
+    description: String 
 });
 
 var message = "";
@@ -216,7 +227,7 @@ app.post("/register", function (req, res) {
                     passport.authenticate("local")(req, res, function () {
                         // res.send("Succesfully logged in");
                         console.log(locality);
-                        User.findOneAndUpdate({ username: user.username }, { location: locality, totalRatings: 0, age: 0 }, function (err) {
+                        User.findOneAndUpdate({ username: user.username }, { location: locality, totalRatings: 0, age: 0, longitude: longi, latitude: lati }, function (err) {
                             if (err) console.log(err);
                         });
                         res.redirect("/user/" + req.user.username);
@@ -253,8 +264,12 @@ app.get("/search", function (req, res) {
     if (req.isAuthenticated()) {
         res.render("search", { meUser: req.user.username });
     } else {
-        res.render("search", { meUser: -1 });
+        res.redirect("/login");
     }
+});
+
+app.get("/newpg", function(req, res){
+    res.render("newpg");
 });
 
 app.get("/logout", function (req, res) {
