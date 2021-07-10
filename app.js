@@ -58,10 +58,12 @@ const pgSchema = new mongoose.Schema({
     longitude: Number,
     city: String,
     price: Number,
-    veg: Boolean,
+    nonveg: Boolean,
     AC: Boolean,
+    accepted: Boolean,
     photos: [String],
-    commentIds: [String]
+    commentIds: [String],
+    userId: String
 });
 
 const commentSchema = new mongoose.Schema({
@@ -99,7 +101,6 @@ passport.use(new Strategy({
     userProfileURL: "https://www.googleapis.com/oauth2/v2/userinfo"
 },
     function (accessToken, refreshToken, profile, done) {
-        console.log(profile);
         const data = profile._json;
         User.findOne({ "googleId": data.id }, function (err, user) {
             if (err) return done(err);
@@ -254,7 +255,6 @@ app.post("/register", function (req, res) {
 
 app.get("/user/:name", function (req, res) {
     const userName = req.params.name;
-    console.log(userName);
     var meUser;
     User.findOne({ username: userName }, function (err, user) {
         console.log(user);
@@ -282,7 +282,7 @@ app.get("/search", function (req, res) {
     }
 });
 
-app.get("/newpg", function(req, res){
+app.get("/newpg", function (req, res) {
     if (req.isAuthenticated()) {
         res.render("newpg", { meUser: req.user.username });
     } else {
@@ -290,13 +290,43 @@ app.get("/newpg", function(req, res){
     }
 });
 
-app.get("/pg", function(req, res){
+app.post("/newpg", function (req, res) {
+    if (req.isAuthenticated()) {
+        var nonveg = false;
+        var ac = false;
+        if (req.body.nonveg == "on") nonveg = true;
+        if (req.body.ac == "on") ac = true;
+        const newPG = new Pg({
+            name: req.body.name,
+            email: req.body.email,
+            latitude: req.body.latitude,
+            longitude: req.body.longitude,
+            city: req.body.city,
+            nonveg: nonveg,
+            AC: ac,
+            accepted: false,
+            userId: req.user._id
+        });
+
+        newPG.save(function (err) {
+            if (err) console.log(err);
+            else {
+                console.log(newPG);
+                res.redirect("/search");
+            }
+        });
+    } else {
+        res.redirect("/login");
+    }
+});
+
+app.get("/pg", function (req, res) {
     if (req.isAuthenticated()) {
         res.render("pg", { meUser: req.user.username });
     } else {
         res.render("pg", { meUser: -1 });
     }
-}); 
+});
 
 app.get("/logout", function (req, res) {
     req.logout();

@@ -1,21 +1,22 @@
 <%- include('header'); -%>
-<main>
-    <div id="newpg-head">
-        <div id="nav-logo">new<span>PG</div>
-    </div>
-    <div id="newpg-form">
-        <form>
-            <div id="pg-fields">Name &nbsp;&nbsp;&nbsp;<input type="text"></div>
-            <div id="pg-fields">Email&nbsp;&nbsp;&nbsp;<input type="text"></div>
-            <div id="pg-fields">City&nbsp;&nbsp;&nbsp;<input type="text"></div>
-            <div id="pg-fields">Price(per Person/ for a year)&nbsp;&nbsp;&nbsp;<input type="number" min="0"></div>
-            <div id="pg-fields">Location(Lattitude)&nbsp;&nbsp;&nbsp;<input type="number"></div>
-            <div id="pg-fields">Location(Longitude)&nbsp;&nbsp;&nbsp;<input type="number"></div>
-            <div id="pg-radio">Non-Veg Food&nbsp;&nbsp;&nbsp;<input type="checkbox"></div>
-            <div id="pg-radio">Air Conditioner&nbsp;&nbsp;&nbsp;<input type="checkbox"></div>
-            <button type="submit" id="login-submit">Submit</button>
-        </form>
-    </div>
-</main>
+    <main>
+        <div id="newpg-head">
+            <div id="nav-logo">new<span>PG</div>
+        </div>
+        <div id="newpg-form">
+            <form method="POST" action="/newpg">
+                <div id="pg-fields">Name &nbsp;&nbsp;&nbsp;<input type="text" name="name"></div>
+                <div id="pg-fields">Email&nbsp;&nbsp;&nbsp;<input type="text" name="email"></div>
+                <div id="pg-fields">City&nbsp;&nbsp;&nbsp;<input type="text" name="city"></div>
+                <div id="pg-fields">Price(per Person/ for a year)&nbsp;&nbsp;&nbsp;<input type="number" name="price"
+                        min="0"></div>
+                <div id="pg-fields">Location(Latitude)&nbsp;&nbsp;&nbsp;<input name="latitude"></div>
+                <div id="pg-fields">Location(Longitude)&nbsp;&nbsp;&nbsp;<input name="longitude"></div>
+                <div id="pg-radio">Non-Veg Food&nbsp;&nbsp;&nbsp;<input type="checkbox" name="nonveg"></div>
+                <div id="pg-radio">Air Conditioner&nbsp;&nbsp;&nbsp;<input type="checkbox" name="ac"></div>
+                <button type="submit" id="login-submit">Submit</button>
+            </form>
+        </div>
+    </main>
 
-<%- include('footer'); -%>
+    <%- include('footer'); -%>
