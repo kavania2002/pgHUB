@@ -342,7 +342,8 @@ app.get("/pg/:pgName", function (req, res) {
         Pg.findOne({name : pgName}, function(err, pg){
             if (pg == null) res.send("No such type of PG exists");
             else {
-                res.render("pg", { meUser: req.user.username, pg : pg });
+                const mapURL = "https://embed.waze.com/iframe?zoom=13&lat="+ pg.latitude +"&lon="+ pg.longitude +"&pin=1";
+                res.render("pg", { meUser: req.user.username, pg : pg, mapURL : mapURL });
             }
         });
     } else {

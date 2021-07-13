@@ -7,9 +7,12 @@
             <p>Rs. <%= pg.price %> for one person annually</p>
             <!-- <p>acco</p> -->
             <!-- <p>Canteen</p> -->
+            <p id="latit" hidden><%= pg.latitude %> </p>
+            <p id="longit" hidden><%= pg.longitude %> </p>
         </div>
-        <div id="map">
-
+        <div id="mapper">
+            <iframe src="<%= mapURL %>"
+            width="100%" height="520"></iframe>
         </div>
     </div>
     <div id="pg-pics">
@@ -37,6 +40,21 @@
         </div>
     </div>
 </main>
+<script type="text/javascript">
+    window.onload = function() {
+      L.mapquest.key = '1xBl8sOTArAG2UhHgQJayxv3oaP5YLZn';
+      const latitude = Number(document.getElementById("latit").textContent);
+      const longitude = Number(document.getElementById("longit").textContent);
+      console.log(latitude, longitude);
+      var map = L.mapquest.map('map', {
+        center: [latitude, longitude],
+        layers: L.mapquest.tileLayer('map'),
+        zoom: 12
+      });
+
+      map.addControl(L.mapquest.control());
+    }
+  </script>
 
 
 <%- include('footer'); -%>
