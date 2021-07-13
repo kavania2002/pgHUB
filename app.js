@@ -61,7 +61,7 @@ const pgSchema = new mongoose.Schema({
     nonveg: Boolean,
     AC: Boolean,
     accepted: Boolean,
-    photos: [String],
+    photos: String,
     commentIds: [String],
     userId: String
 });
@@ -257,7 +257,7 @@ app.get("/user/:name", function (req, res) {
     const userName = req.params.name;
     var meUser;
     User.findOne({ username: userName }, function (err, user) {
-        console.log(user);
+        // console.log(user);
         if (err) {
             console.log(err);
         } else {
@@ -276,7 +276,10 @@ app.get("/user/:name", function (req, res) {
 
 app.get("/search", function (req, res) {
     if (req.isAuthenticated()) {
-        res.render("search", { meUser: req.user.username });
+        Pg.find({}, function (err, pgs) {
+            // console.log(pgs);
+            res.render("search", { meUser: req.user.username, pgs: pgs });
+        });
     } else {
         res.redirect("/login");
     }
@@ -297,20 +300,23 @@ app.post("/newpg", function (req, res) {
         if (req.body.nonveg == "on") nonveg = true;
         if (req.body.ac == "on") ac = true;
         const newPG = new Pg({
-            name: req.body.name,
-            email: req.body.email,
-            latitude: req.body.latitude,
-            longitude: req.body.longitude,
-            city: req.body.city,
+            name: req.body.name.trim(),
+            email: req.body.email.trim(),
+            latitude: req.body.latitude.trim(),
+            longitude: req.body.longitude.trim(),
+            city: req.body.city.trim(),
+            price: req.body.price.trim(),
             nonveg: nonveg,
             AC: ac,
             accepted: false,
+            photos: req.body.photos.trim(),
             userId: req.user._id
         });
 
         newPG.save(function (err) {
             if (err) console.log(err);
             else {
+                alert("Your request has been sent to the admin.")
                 console.log(newPG);
                 res.redirect("/search");
             }
@@ -320,9 +326,15 @@ app.post("/newpg", function (req, res) {
     }
 });
 
-app.get("/pg", function (req, res) {
+app.get("/pg/:pgName", function (req, res) {
     if (req.isAuthenticated()) {
-        res.render("pg", { meUser: req.user.username });
+        const pgName = req.params.pgName;
+        Pg.findOne({name : pgName}, function(err, pg){
+            if (pg == null) res.send("No such type of PG exists");
+            else {
+                res.render("pg", { meUser: req.user.username, pg : pg });
+            }
+        });
     } else {
         res.render("pg", { meUser: -1 });
     }
