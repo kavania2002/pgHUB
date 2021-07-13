@@ -277,13 +277,23 @@ app.get("/user/:name", function (req, res) {
 app.get("/search", function (req, res) {
     if (req.isAuthenticated()) {
         Pg.find({}, function (err, pgs) {
-            // console.log(pgs);
-            res.render("search", { meUser: req.user.username, pgs: pgs });
+            var cities = new Set();
+            pgs.forEach(function(pg){
+                cities.add(pg.city);
+            });
+            console.log(cities);
+            res.render("search", { meUser: req.user.username, pgs: pgs, cities : cities });
         });
+
     } else {
         res.redirect("/login");
     }
 });
+
+app.post("/search", function(req, res){
+    const { cities } = req.body;
+    console.log(cities);
+}); 
 
 app.get("/newpg", function (req, res) {
     if (req.isAuthenticated()) {

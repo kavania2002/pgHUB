@@ -1,15 +1,12 @@
 <%- include('header'); %>
     <main id="search-page">
         <div id="filters">
-            <form method="POST">
-                <button type="submit" id="login-submit">Filter</button>
+            <form method="POST" action="/search">
                 <div id="filter-fields">
                     <h2>Cities</h2>
-                    <div><input type="checkbox">Jamnagar</div>
-                    <div><input type="checkbox">Jamnagar</div>
-                    <div><input type="checkbox">Jamnagar</div>
-                    <div><input type="checkbox">Jamnagar</div>
-                    <div><input type="checkbox">Jamnagar</div>
+                    <% cities.forEach(function(city){ %>
+                        <div><input type="checkbox" value="<%= city %>" name="cities"><%= city %></div>
+                        <% }); %>
                 </div>
                 <div id="filter-fields">
                     <h2>Price</h2>
@@ -27,6 +24,7 @@
                     <div><input type="checkbox">4</div>
                     <div><input type="checkbox">5</div>
                 </div>
+                <button type="submit" id="login-submit">Filter</button>
             </form>
         </div>
         <div id="results">
