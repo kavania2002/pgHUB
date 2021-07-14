@@ -391,6 +391,9 @@ app.get("/pg/:pgName", function (req, res) {
                         }
                     });
                 }
+                if (pg.commentIds.length == 0) {
+                    res.render("pg", { meUser: req.user.username, pg: pg, mapURL: mapURL, comments: comments });
+                }
             }
         });
     } else {
