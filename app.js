@@ -73,7 +73,8 @@ const commentSchema = new mongoose.Schema({
     score: Number,
     userId: String,
     pgId: String,
-    username: String
+    username: String,
+    pgName: String
 });
 
 var message = "";
@@ -252,8 +253,8 @@ app.post("/register", function (req, res) {
                         console.log(locality);
                         User.findOneAndUpdate({ username: user.username }, { location: locality, totalRatings: 0, age: 0, longitude: longi, latitude: lati }, function (err) {
                             if (err) console.log(err);
+                            res.redirect("/user/" + req.user.username);
                         });
-                        res.redirect("/user/" + req.user.username);
                     });
                 });
             });
@@ -266,15 +267,31 @@ app.post("/register", function (req, res) {
 app.get("/user/:name", function (req, res) {
     const userName = req.params.name;
     var meUser;
+    // console.log(userName);
     User.findOne({ username: userName }, function (err, user) {
         // console.log(user);
         if (err) {
             console.log(err);
         } else {
             if (user != null) {
-                if (req.isAuthenticated()) meUser = req.user.username;
-                else meUser = -1;
-                res.render("user", { user: user, meUser: meUser });
+                if (req.isAuthenticated()) {
+                    meUser = req.user.username;
+                    var comments = new Array();
+                    for (let index = 0; index < user.commentIds.length; index++) {
+                        const comId = user.commentIds[index];
+                        Comment.findById(comId, function (err, comme) {
+                            // console.log(comme);
+                            comments.push(comme);
+                            if (index == user.commentIds.length - 1) {
+                                // console.log(comments);
+                                res.render("user", { user: user, meUser: meUser, comments: comments });
+                            }
+                        });
+                    }
+                    if (user.commentIds.length == 0) {
+                        res.render("user", { user: user, meUser: meUser, comments: comments });
+                    }
+                }
             } else {
                 message = "Couldn't find user";
                 res.redirect("/login");
@@ -364,11 +381,11 @@ app.get("/pg/:pgName", function (req, res) {
                 const comments = new Array();
                 for (let index = 0; index < pg.commentIds.length; index++) {
                     const comId = pg.commentIds[index];
-                    console.log(comId);
+                    // console.log(comId);
                     Comment.findById(comId, function (err, oneComment) {
-                        console.log(oneComment);
+                        // console.log(oneComment);
                         comments.push(oneComment);
-                        if (index == pg.commentIds.length-1) {
+                        if (index == pg.commentIds.length - 1) {
                             console.log(comments);
                             res.render("pg", { meUser: req.user.username, pg: pg, mapURL: mapURL, comments: comments });
                         }
@@ -390,7 +407,8 @@ app.post("/comment", function (req, res) {
         content: req.body.content,
         userId: req.user.id,
         pgId: req.body.pgID,
-        username: req.user.username
+        username: req.user.username,
+        pgName: req.body.pgName
     });
     console.log(comment);
     const pgName = req.body.pgName;

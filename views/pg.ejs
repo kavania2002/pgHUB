@@ -40,7 +40,7 @@
             <% comments.forEach(function(comment) { %>
                 <div id="com">
                     <div id="com-user">
-                        <h5><%= comment.username %></h5>
+                        <h5><a href="/user/<%= comment.username %>"><%= comment.username %></a></h5>
                         <div id="rating-comment"><%= comment.score %></div>
                     </div>
                     <p><%= comment.content %></p>
