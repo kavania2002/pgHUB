@@ -26,8 +26,9 @@
 }
 #user-ratings{
     background-color: rgba(250, 114, 2, 1);
-    height: 500px;
+    /* height: 500px; */
     padding-top: 20px;
+    padding-bottom: 20px;
 }
 #rat-logo{
     font-family: 'Yellowtail', cursive;
@@ -60,6 +61,12 @@
     border-radius: 50px;
     padding-top: 15px;
 }
+#rat-info {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 50px;
+    padding-bottom: 15px;
+}
 #rat h4{
     text-align: start;
     margin-left: 95px;
@@ -77,5 +84,5 @@
     justify-content: center;
     color: white;
     float: right;
-    transform: translate(-100px, -75px);
+    /* transform: translate(-100px, -75px); */
 }

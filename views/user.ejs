@@ -18,11 +18,10 @@
             <div id="rat-logo">my<span>Ratings</span></div>
             <div id="rat">
                 <% comments.forEach(function(comment){ %>
-                <div>
+                <div id="rat-info">
                     <h4><a href="/pg/<%= comment.pgName %>"><%= comment.pgName %></a>, &nbsp;15</h4>
                     <div id="rating"><%= comment.score %></div>
-                    <p><%= comment.content %> </p>
-                </div>
+                </div><p><%= comment.content %> </p>
             <% }) %>
             </div>
         </div>
