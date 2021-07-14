@@ -1,60 +1,51 @@
 <%- include('header'); -%>
-<main>
-    <div id="desc-map">
-        <div id="desc">
-            <p><%= pg.name %></p>
-            <p><%= pg.city %></p>
-            <p>Rs. <%= pg.price %> for one person annually</p>
-            <!-- <p>acco</p> -->
-            <!-- <p>Canteen</p> -->
-            <p id="latit" hidden><%= pg.latitude %> </p>
-            <p id="longit" hidden><%= pg.longitude %> </p>
-        </div>
-        <div id="mapper">
-            <iframe src="<%= mapURL %>"
-            width="100%" height="520"></iframe>
-        </div>
-    </div>
-    <div id="pg-pics">
-        
-    </div>
-    <div id="comments">
-        <div id="user-comment">
-            <h3>Type in your thoughts!!</h3>
-            <form>
-                <textarea></textarea>
-                <P>Your Rating</P><input type="number" max="5" min="1">
-                <button type="submit" id="login-submit">SUBMIT</button>
-            </form>
-        </div>
-        <div id="fo-logo" style="margin-left: 630px; margin-top: 20px;">pg<span>COMMENTS</span></div>
-        <div id="com">
-            <div id="com-user">
-                <h5>Name</h5>
-                <h5>Age</h5>
-                <div id="rating-comment">4</div> 
+    <main>
+        <div id="desc-map">
+            <div id="desc">
+                <p>
+                    <%= pg.name %>
+                </p>
+                <p>
+                    <%= pg.city %>
+                </p>
+                <p>Rs. <%= pg.price %> for one person annually</p>
+                <!-- <p>acco</p> -->
+                <!-- <p>Canteen</p> -->
+                <p id="latit" hidden>
+                    <%= pg.latitude %>
+                </p>
+                <p id="longit" hidden>
+                    <%= pg.longitude %>
+                </p>
             </div>
-            <p>Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-                Lorem ipsum Lorem ipsumLorem ipsumLorem ipsumLorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-            </p>
+            <div id="mapper">
+                <iframe src="<%= mapURL %>" width="100%" height="520"></iframe>
+            </div>
         </div>
-    </div>
-</main>
-<script type="text/javascript">
-    window.onload = function() {
-      L.mapquest.key = '1xBl8sOTArAG2UhHgQJayxv3oaP5YLZn';
-      const latitude = Number(document.getElementById("latit").textContent);
-      const longitude = Number(document.getElementById("longit").textContent);
-      console.log(latitude, longitude);
-      var map = L.mapquest.map('map', {
-        center: [latitude, longitude],
-        layers: L.mapquest.tileLayer('map'),
-        zoom: 12
-      });
+        <div id="pg-pics">
 
-      map.addControl(L.mapquest.control());
-    }
-  </script>
-
-
-<%- include('footer'); -%>
+        </div>
+        <div id="comments">
+            <div id="user-comment">
+                <h3>Type in your thoughts!!</h3>
+                <form action="/comment" method="POST">
+                    <textarea name="content"></textarea>
+                    <p>Your Rating</p><input type="number" name="score" max="5" min="1">
+                    <button type="submit" id="login-submit">SUBMIT</button>
+                    <input type="text" name="pgID" value="<%= pg.id %>" hidden>
+                    <input type="text" name="pgName" value="<%= pg.name %>" hidden>
+                </form>
+            </div>
+            <div id="fo-logo" style="margin-left: 630px; margin-top: 20px;">pg<span>COMMENTS</span></div>
+            <% comments.forEach(function(comment) { %>
+                <div id="com">
+                    <div id="com-user">
+                        <h5><%= comment.username %></h5>
+                        <div id="rating-comment"><%= comment.score %></div>
+                    </div>
+                    <p><%= comment.content %></p>
+                </div>
+            <% }); %>
+        </div>
+    </main>
+    <%- include('footer'); -%>

@@ -19,6 +19,7 @@ import facebook from "passport-facebook";
 import alert from 'alert';
 import cookieParser from "cookie-parser";
 import { get } from "http";
+import { stringify } from "querystring";
 
 const app = express();
 
@@ -61,6 +62,7 @@ const pgSchema = new mongoose.Schema({
     nonveg: Boolean,
     AC: Boolean,
     accepted: Boolean,
+    totalRatings: Number,
     photos: String,
     commentIds: [String],
     userId: String
@@ -70,7 +72,8 @@ const commentSchema = new mongoose.Schema({
     content: String,
     score: Number,
     userId: String,
-    pgId: String
+    pgId: String,
+    username: String
 });
 
 var message = "";
@@ -185,7 +188,10 @@ app.get('/auth/facebook/pgHUB',
         res.redirect('/');
     });
 
+// ------------------------------------------------------------------
 
+
+// ------------------- LOGIN ----------------------------------------
 app.get("/login", function (req, res) {
     if (req.isAuthenticated()) {
         res.redirect("/user/" + req.user.username);
@@ -215,7 +221,9 @@ app.post("/login", function (req, res) {
         }
     });
 });
+// ----------------------------------------------------------------
 
+// -------------------------- REGISTER ----------------------------
 app.get("/register", function (req, res) {
     if (req.isAuthenticated()) {
         res.redirect("/user/" + req.user.username);
@@ -252,7 +260,9 @@ app.post("/register", function (req, res) {
         }
     });
 });
+// -------------------------------------------------------------------------------------------------------------
 
+// --------------------------------------- USERS -------------------------------------------------
 app.get("/user/:name", function (req, res) {
     const userName = req.params.name;
     var meUser;
@@ -273,16 +283,19 @@ app.get("/user/:name", function (req, res) {
         }
     });
 });
+// ------------------------------------------------------------------------------------------------
 
+
+// -------------------------------------- SEARCH/FILTER -----------------------------------------
 app.get("/search", function (req, res) {
     if (req.isAuthenticated()) {
         Pg.find({}, function (err, pgs) {
             var cities = new Set();
-            pgs.forEach(function(pg){
+            pgs.forEach(function (pg) {
                 cities.add(pg.city);
             });
             console.log(cities);
-            res.render("search", { meUser: req.user.username, pgs: pgs, cities : cities });
+            res.render("search", { meUser: req.user.username, pgs: pgs, cities: cities });
         });
 
     } else {
@@ -290,11 +303,13 @@ app.get("/search", function (req, res) {
     }
 });
 
-app.post("/search", function(req, res){
+app.post("/search", function (req, res) {
     const { cities } = req.body;
     console.log(cities);
-}); 
+});
+// ---------------------------------------------------------------------------------------------
 
+// ------------------------------------ Application for NEwPG ------------------------------------
 app.get("/newpg", function (req, res) {
     if (req.isAuthenticated()) {
         res.render("newpg", { meUser: req.user.username });
@@ -318,6 +333,7 @@ app.post("/newpg", function (req, res) {
             price: req.body.price.trim(),
             nonveg: nonveg,
             AC: ac,
+            totalRatings: 0,
             accepted: false,
             photos: req.body.photos.trim(),
             userId: req.user._id
@@ -335,22 +351,69 @@ app.post("/newpg", function (req, res) {
         res.redirect("/login");
     }
 });
+// -----------------------------------------------------------------------------------------------------------
 
+// ---------------------------------------- Specific PG ------------------------------------------------
 app.get("/pg/:pgName", function (req, res) {
     if (req.isAuthenticated()) {
         const pgName = req.params.pgName;
-        Pg.findOne({name : pgName}, function(err, pg){
+        Pg.findOne({ name: pgName }, function (err, pg) {
             if (pg == null) res.send("No such type of PG exists");
             else {
-                const mapURL = "https://embed.waze.com/iframe?zoom=13&lat="+ pg.latitude +"&lon="+ pg.longitude +"&pin=1";
-                res.render("pg", { meUser: req.user.username, pg : pg, mapURL : mapURL });
+                const mapURL = "https://embed.waze.com/iframe?zoom=13&lat=" + pg.latitude + "&lon=" + pg.longitude + "&pin=1";
+                const comments = new Array();
+                for (let index = 0; index < pg.commentIds.length; index++) {
+                    const comId = pg.commentIds[index];
+                    console.log(comId);
+                    Comment.findById(comId, function (err, oneComment) {
+                        console.log(oneComment);
+                        comments.push(oneComment);
+                        if (index == pg.commentIds.length-1) {
+                            console.log(comments);
+                            res.render("pg", { meUser: req.user.username, pg: pg, mapURL: mapURL, comments: comments });
+                        }
+                    });
+                }
             }
         });
     } else {
-        res.render("pg", { meUser: -1 });
+        res.redirect("/login");
     }
 });
 
+// ----------------------------------------------------------------------------------------------------
+
+// ------------------------------------------- New Comment Request ----------------------------------------
+app.post("/comment", function (req, res) {
+    const comment = new Comment({
+        score: req.body.score,
+        content: req.body.content,
+        userId: req.user.id,
+        pgId: req.body.pgID,
+        username: req.user.username
+    });
+    console.log(comment);
+    const pgName = req.body.pgName;
+    comment.save(function (err, comme) {
+        if (err) console.log(err);
+        else {
+            User.findOneAndUpdate(
+                { _id: comment.userId },
+                { $push: { commentIds: comme.id }, $inc: { totalRatings: 1 } }, function (err) {
+                    if (err) console.log(err);
+                    else console.log("Successfully updated user")
+                });
+            Pg.findOneAndUpdate({ _id: comment.pgId },
+                { $push: { commentIds: comme.id }, $inc: { totalRatings: comme.score } }, function (err) {
+                    if (err) console.log(err);
+                    else console.log("Successfully updated in PG");
+                });
+            res.redirect("/pg/" + pgName);
+        }
+    })
+});
+
+// --------------------------------------------- LOGOUT -------------------------------------------------------
 app.get("/logout", function (req, res) {
     req.logout();
     res.redirect("/login");
