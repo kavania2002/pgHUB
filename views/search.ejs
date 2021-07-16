@@ -31,7 +31,7 @@
             <% pgs.forEach(function(pg){ %>
                 <a href="/pg/<%= pg.name %> ">
                     <div id="item">
-                        <div id="rating-search">4</div>
+                        <div id="rating-search"><%= pg.avgRating %></div>
                         <p>
                             <%= pg.name %>
                         </p>

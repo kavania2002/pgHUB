@@ -65,7 +65,8 @@ const pgSchema = new mongoose.Schema({
     totalRatings: Number,
     photos: String,
     commentIds: [String],
-    userId: String
+    userId: String,
+    avgRating: Number
 });
 
 const commentSchema = new mongoose.Schema({
@@ -379,20 +380,26 @@ app.get("/pg/:pgName", function (req, res) {
             else {
                 const mapURL = "https://embed.waze.com/iframe?zoom=13&lat=" + pg.latitude + "&lon=" + pg.longitude + "&pin=1";
                 const comments = new Array();
+                var totalRatingCount = 0;
                 for (let index = 0; index < pg.commentIds.length; index++) {
                     const comId = pg.commentIds[index];
                     // console.log(comId);
                     Comment.findById(comId, function (err, oneComment) {
                         // console.log(oneComment);
                         comments.push(oneComment);
+                        totalRatingCount += oneComment.score;
                         if (index == pg.commentIds.length - 1) {
-                            console.log(comments);
-                            res.render("pg", { meUser: req.user.username, pg: pg, mapURL: mapURL, comments: comments });
+                            // console.log(comments);
+                            pg.avgRating = Math.round(totalRatingCount / pg.commentIds.length);
+                            pg.save(function (err) {
+                                if (err) console.log(err);
+                                else res.render("pg", { meUser: req.user.username, pg: pg, mapURL: mapURL, comments: comments});
+                            })
                         }
                     });
                 }
                 if (pg.commentIds.length == 0) {
-                    res.render("pg", { meUser: req.user.username, pg: pg, mapURL: mapURL, comments: comments });
+                    res.render("pg", { meUser: req.user.username, pg: pg, mapURL: mapURL, comments: comments, avgRating: "Not Rated" });
                 }
             }
         });
@@ -413,7 +420,6 @@ app.post("/comment", function (req, res) {
         username: req.user.username,
         pgName: req.body.pgName
     });
-    console.log(comment);
     const pgName = req.body.pgName;
     comment.save(function (err, comme) {
         if (err) console.log(err);
@@ -422,13 +428,16 @@ app.post("/comment", function (req, res) {
                 { _id: comment.userId },
                 { $push: { commentIds: comme.id }, $inc: { totalRatings: 1 } }, function (err) {
                     if (err) console.log(err);
-                    else console.log("Successfully updated user")
+                    else console.log("Successfully updated user");
                 });
             Pg.findOneAndUpdate({ _id: comment.pgId },
-                { $push: { commentIds: comme.id }, $inc: { totalRatings: comme.score } }, function (err) {
+                { $push: { commentIds: comme.id }, $inc: { totalRatings: comme.score } }, function (err, result) {
                     if (err) console.log(err);
-                    else console.log("Successfully updated in PG");
+                    else {
+                        console.log("Successfully updated in PG");
+                    }
                 });
+
             res.redirect("/pg/" + pgName);
         }
     })
