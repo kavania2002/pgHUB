@@ -313,7 +313,7 @@ app.get("/search", function (req, res) {
                 cities.add(pg.city);
             });
             console.log(cities);
-            res.render("search", { meUser: req.user.username, pgs: pgs, cities: cities });
+            res.render("search", { meUser: req.user.username, pgs: pgs, cities: cities, dikhaneKa: 0 });
         });
 
     } else {
@@ -322,9 +322,44 @@ app.get("/search", function (req, res) {
 });
 
 app.post("/search", function (req, res) {
-    const { cities } = req.body;
-    console.log(cities);
+    Pg.find({}, function (err, pgs) {
+        var citiess = new Set();
+        pgs.forEach(function (pg) {
+            citiess.add(pg.city);
+        });
+        const { cities } = req.body;
+        const { rating } = req.body;
+        const ratings = new Array();
+        // console.log(cities);
+        if (rating != undefined) {
+            for (let i = 0; i < rating.length; i++) {
+                ratings.push(Number(rating[i]));
+            }
+
+            if (cities != undefined && cities.length != 0) {
+                Pg.find({ city: cities, avgRating: ratings }, function (err, pgs) {
+                    res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                });
+            } else {
+                Pg.find({ avgRating: ratings }, function (err, pgs) {
+                    res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                });
+            }
+        } else {
+            if (cities != undefined && cities.length != 0) {
+                Pg.find({ city: cities }, function (err, pgs) {
+                    // console.log(pgs);
+                    res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                });
+            } else {
+                Pg.find(function (err, pgs) {
+                    res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                });
+            }
+        }
+    });
 });
+
 // ---------------------------------------------------------------------------------------------
 
 // ------------------------------------ Application for NEwPG ------------------------------------
@@ -393,7 +428,7 @@ app.get("/pg/:pgName", function (req, res) {
                             pg.avgRating = Math.round(totalRatingCount / pg.commentIds.length);
                             pg.save(function (err) {
                                 if (err) console.log(err);
-                                else res.render("pg", { meUser: req.user.username, pg: pg, mapURL: mapURL, comments: comments});
+                                else res.render("pg", { meUser: req.user.username, pg: pg, mapURL: mapURL, comments: comments });
                             })
                         }
                     });

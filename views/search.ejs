@@ -1,6 +1,7 @@
 <%- include('header'); %>
     <main id="search-page">
         <div id="filters">
+            <% if (dikhaneKa != -1) { %>
             <form method="POST" action="/search">
                 <div id="filter-fields">
                     <h2>Cities</h2>
@@ -18,14 +19,15 @@
                 </div>
                 <div id="filter-fields">
                     <h2>Ratings</h2>
-                    <div><input type="checkbox">1</div>
-                    <div><input type="checkbox">2</div>
-                    <div><input type="checkbox">3</div>
-                    <div><input type="checkbox">4</div>
-                    <div><input type="checkbox">5</div>
+                    <div><input name="rating" value="1" type="checkbox">1</div>
+                    <div><input name="rating" value="2" type="checkbox">2</div>
+                    <div><input name="rating" value="3" type="checkbox">3</div>
+                    <div><input name="rating" value="4" type="checkbox">4</div>
+                    <div><input name="rating" value="5" type="checkbox">5</div>
                 </div>
                 <button type="submit" id="login-submit">Filter</button>
             </form>
+            <% } %>
         </div>
         <div id="results">
             <% pgs.forEach(function(pg){ %>
