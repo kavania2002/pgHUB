@@ -494,6 +494,10 @@ app.get("/admin", function(req, res){
     res.render("admin", { message: message, meUser: -1 });
 });
 
+app.get("/pgEdit", function(req, res){
+    res.render("pgEdit", { message: message, meUser: -1 });
+});
+
 app.listen(3000, function () {
     console.log("Server started at port 3000");
 });
