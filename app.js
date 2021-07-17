@@ -487,11 +487,11 @@ app.get("/logout", function (req, res) {
 
 // ------------------------------------------- Admin -----------------------------------------------------
 app.get("/adminLogin", function(req, res){
-    res.render("adminLogin");
+    res.render("adminLogin", { message: message, meUser: -1 });
 });
 
 app.get("/admin", function(req, res){
-    res.render("admin");
+    res.render("admin", { message: message, meUser: -1 });
 });
 
 app.listen(3000, function () {
