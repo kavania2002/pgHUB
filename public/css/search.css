@@ -40,6 +40,10 @@
 #item:hover{
     box-shadow: 2px 2px 1px #fff;
 }
+#item p{
+    color: #fff;
+    text-decoration: #fb8c31 underline;
+}
 #rating-search{
     height: 70px;
     width: 70px;
