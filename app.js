@@ -484,6 +484,16 @@ app.get("/logout", function (req, res) {
     res.redirect("/login");
 });
 
+
+// ------------------------------------------- Admin -----------------------------------------------------
+app.get("/adminLogin", function(req, res){
+    res.render("adminLogin");
+});
+
+app.get("/admin", function(req, res){
+    res.render("admin");
+});
+
 app.listen(3000, function () {
     console.log("Server started at port 3000");
 });
