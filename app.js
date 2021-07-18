@@ -329,32 +329,64 @@ app.post("/search", function (req, res) {
         });
         const { cities } = req.body;
         const { rating } = req.body;
+        const { price } = req.body;
         const ratings = new Array();
-        // console.log(cities);
-        if (rating != undefined) {
-            for (let i = 0; i < rating.length; i++) {
-                ratings.push(Number(rating[i]));
-            }
+        if (price != undefined) {
+            const p1 = Number(price.split('-')[0]);
+            const p2 = Number(price.split('-')[1]);
+            console.log(p1, p2);
+            if (rating != undefined) {
+                for (let i = 0; i < rating.length; i++) {
+                    ratings.push(Number(rating[i]));
+                }
 
-            if (cities != undefined && cities.length != 0) {
-                Pg.find({ city: cities, avgRating: ratings }, function (err, pgs) {
-                    res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
-                });
+                if (cities != undefined && cities.length != 0) {
+                    Pg.find({ city: cities, avgRating: ratings, price: { $gte: p1, $lte: p2 } }, function (err, pgs) {
+                        res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                    });
+                } else {
+                    Pg.find({ avgRating: ratings, price: { $gte: p1, $lte: p2 }}, function (err, pgs) {
+                        res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                    });
+                }
             } else {
-                Pg.find({ avgRating: ratings }, function (err, pgs) {
-                    res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
-                });
+                if (cities != undefined && cities.length != 0) {
+                    Pg.find({ city: cities, price: { $gte: p1, $lte: p2 } }, function (err, pgs) {
+                        // console.log(pgs);
+                        res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                    });
+                } else {
+                    Pg.find({ price: { $gte: p1, $lte: p2 } }, function (err, pgs) {
+                        res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                    });
+                }
             }
         } else {
-            if (cities != undefined && cities.length != 0) {
-                Pg.find({ city: cities }, function (err, pgs) {
-                    // console.log(pgs);
-                    res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
-                });
+            if (rating != undefined) {
+                for (let i = 0; i < rating.length; i++) {
+                    ratings.push(Number(rating[i]));
+                }
+
+                if (cities != undefined && cities.length != 0) {
+                    Pg.find({ city: cities, avgRating: ratings }, function (err, pgs) {
+                        res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                    });
+                } else {
+                    Pg.find({ avgRating: ratings }, function (err, pgs) {
+                        res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                    });
+                }
             } else {
-                Pg.find(function (err, pgs) {
-                    res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
-                });
+                if (cities != undefined && cities.length != 0) {
+                    Pg.find({ city: cities }, function (err, pgs) {
+                        // console.log(pgs);
+                        res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                    });
+                } else {
+                    Pg.find(function (err, pgs) {
+                        res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                    });
+                }
             }
         }
     });
@@ -486,18 +518,18 @@ app.get("/logout", function (req, res) {
 
 
 // ------------------------------------------- Admin -----------------------------------------------------
-app.get("/adminLogin", function(req, res){
+app.get("/adminLogin", function (req, res) {
     res.render("adminLogin", { message: message, meUser: -1 });
 });
 
-app.get("/admin", function(req, res){
+app.get("/admin", function (req, res) {
     res.render("admin", { message: message, meUser: -1 });
 });
 
-app.get("/pgEdit", function(req, res){
+app.get("/pgEdit", function (req, res) {
     res.render("pgEdit", { message: message, meUser: -1 });
 });
 
 app.listen(3000, function () {
-    console.log("Server started at port 3000");
+    console.log("Server started at port http://localhost:3000/");
 });
