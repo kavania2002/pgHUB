@@ -1,9 +1,9 @@
 <%- include('header'); %>
 <main>
     <div id="main-login">
-        <form id="login-form" method="POST" action="/login">
+        <form id="login-form" method="POST" action="/adminlogin">
             <h2>Login</h2>
-            <input type="email" value="admin" disabled class="login-feild" placeholder="E-mail*" name="username" required>
+            <input type="email" class="login-feild" placeholder="E-mail*" name="username" required>
             <input type="password" class="login-feild" placeholder="Password*" name="password" required>
             <div style="display: inline;">
                 <button type="submit" id="login-submit">Login</button>

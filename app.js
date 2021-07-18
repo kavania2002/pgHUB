@@ -49,7 +49,8 @@ const userSchema = new mongoose.Schema({
     facebookId: String,
     latitude: Number,
     longitude: Number,
-    commentIds: [String]
+    commentIds: [String],
+    admin: Boolean
 });
 
 const pgSchema = new mongoose.Schema({
@@ -345,7 +346,7 @@ app.post("/search", function (req, res) {
                         res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 } else {
-                    Pg.find({ avgRating: ratings, price: { $gte: p1, $lte: p2 }}, function (err, pgs) {
+                    Pg.find({ avgRating: ratings, price: { $gte: p1, $lte: p2 } }, function (err, pgs) {
                         res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 }
@@ -519,12 +520,51 @@ app.get("/logout", function (req, res) {
 
 // ------------------------------------------- Admin -----------------------------------------------------
 app.get("/adminLogin", function (req, res) {
-    res.render("adminLogin", { message: message, meUser: -1 });
+    if (req.isAuthenticated()) {
+        if (req.user.admin == true) {
+            res.render("adminLogin", { message: message, meUser: req.username });
+        } else {
+            res.send("You must Logout first");
+        }
+    } else {
+        res.render("adminlogin", { message : message, meUser : -1 });
+    }
+});
+
+app.post("/adminlogin", function (req, res) {
+    const admin = new User({
+        username: req.body.username,
+        password: req.body.password
+    });
+    User.findOne({ username: req.body.username }, function (err, aadmi) {
+        if (aadmi != null || aadmi != undefined) {
+            if (aadmi.admin == true) {
+                req.login(admin, function (err) {
+                    if (err) {
+                        console.log(err);
+                        res.redirect("/adminlogin");
+                    } else {
+                        passport.authenticate("local")(req, res, function () {
+                            res.redirect("/admin");
+                        });
+                    }
+                });
+            } else {
+                res.send("You are not an admin");
+            }
+        } else {
+            res.redirect("/adminlogin");
+        }
+    });
+
+
 });
 
 app.get("/admin", function (req, res) {
     res.render("admin", { message: message, meUser: -1 });
 });
+
+app.post("")
 
 app.get("/pgEdit", function (req, res) {
     res.render("pgEdit", { message: message, meUser: -1 });
