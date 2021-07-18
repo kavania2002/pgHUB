@@ -39,6 +39,7 @@
 }
 #item:hover{
     box-shadow: 2px 2px 1px #fff;
+    cursor: pointer;
 }
 #item p{
     color: #fff;

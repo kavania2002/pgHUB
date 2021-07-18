@@ -1,0 +1,77 @@
+#admin-panel{
+    background-color: #fb8c31;
+    margin-top: 1px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#admin-search{
+    width: 80%;
+    padding: 15px;
+    display: grid;
+    grid-template-columns: auto;
+    gap: 5px;
+}
+#admin-item{
+    background-color: #fb8c31;
+    border-radius: 15px;
+    padding: 5px;
+    transition: 0.5s;
+    font-size: 20px;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+}
+#admin-item:hover{
+    box-shadow: 2px 2px 1px #fff;
+    cursor: pointer;
+}
+#admin-add{
+    background-color: #fff;
+    color: #fb8c31;
+    margin-top: 10px;
+    border-radius: 20px;
+    width: 30%;
+    font-size: 30px;
+    margin-bottom: 50px;
+    height: 170px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: 0.5s;
+}
+#admin-add:hover{
+    background-color: #fb8c31;
+    color: #fff;
+    border: 5px solid #fff;
+    cursor:pointer;
+}
+#admin-add-icon{
+    height: 70px;
+    width: 70px;
+    border-radius: 70px;
+    background-color: #fff;
+    font-size: 60px;
+    display: flex;
+    transition: 0.5s;
+    align-items: center;
+    justify-content: center;
+    color: #fb8c31;
+}
+#admin-add:hover #admin-add-icon{
+    transform:rotateZ(180deg);
+    transition: 1s;
+}
+#admin-remove{
+    height: 40px;
+    width: 40px;
+    border-radius: 70px;
+    background-color: #fff;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fb8c31;
+}
