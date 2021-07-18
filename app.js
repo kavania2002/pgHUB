@@ -561,10 +561,16 @@ app.post("/adminlogin", function (req, res) {
 });
 
 app.get("/admin", function (req, res) {
-    res.render("admin", { message: message, meUser: -1 });
+    if (req.isAuthenticated()){
+        if (req.user.admin == true){
+            res.render("admin", { message: message, meUser: req.user.username });
+        } else {
+            res.send("You are not an admin");
+        }
+    } else {
+        res.redirect("/adminlogin")
+    }
 });
-
-app.post("")
 
 app.get("/pgEdit", function (req, res) {
     res.render("pgEdit", { message: message, meUser: -1 });
