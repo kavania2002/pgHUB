@@ -5,17 +5,37 @@
     </div>
     <div id="newpg-form">
         <form method="POST" action="/newpg">
-            <div id="pg-fields">Name &nbsp;&nbsp;&nbsp;<input type="text" name="name"></div>
-            <div id="pg-fields">Email&nbsp;&nbsp;&nbsp;<input type="text" name="email"></div>
-            <div id="pg-fields">City&nbsp;&nbsp;&nbsp;<input type="text" name="city"></div>
-            <div id="pg-fields">Price(per Person/ for a year)&nbsp;&nbsp;&nbsp;<input type="number" name="price"
+            <div id="pg-fields">Name &nbsp;&nbsp;&nbsp;<input type="text" value="<%= pg.name %>" name="name"></div>
+            <div id="pg-fields">Email&nbsp;&nbsp;&nbsp;<input type="text" value="<%= pg.email %>" disabled name="email"></div>
+            <div id="pg-fields">City&nbsp;&nbsp;&nbsp;<input type="text" value="<%= pg.city %>" name="city"></div>
+            <div id="pg-fields">Price(per Person/ for a year)&nbsp;&nbsp;&nbsp;<input type="number" value="<%= pg.price %>" name="price"
                     min="0"></div>
-            <div id="pg-fields">Location(Latitude)&nbsp;&nbsp;&nbsp;<input name="latitude"></div>
-            <div id="pg-fields">Location(Longitude)&nbsp;&nbsp;&nbsp;<input name="longitude"></div>
-            <div id="pg-radio">Non-Veg Food&nbsp;&nbsp;&nbsp;<input type="checkbox" name="nonveg"></div>
-            <div id="pg-radio">Air Conditioner&nbsp;&nbsp;&nbsp;<input type="checkbox" name="ac"></div>
+            <div id="pg-fields">Location(Latitude)&nbsp;&nbsp;&nbsp;<input value="<%= pg.latitude %>" name="latitude"></div>
+            <div id="pg-fields">Location(Longitude)&nbsp;&nbsp;&nbsp;<input value="<%= pg.longitude %>" name="longitude"></div>
+
+            <% if (pg.nonveg == true){ %>
+                <div id="pg-radio">Non-Veg Food&nbsp;&nbsp;&nbsp;<input type="checkbox" name="nonveg" checked></div>
+            <% } %>    
+            <% if (pg.nonveg == false){ %>
+                <div id="pg-radio">Non-Veg Food&nbsp;&nbsp;&nbsp;<input type="checkbox" name="nonveg"></div>
+            <% } %>    
+
+            <% if (pg.AC == true){ %>
+            <div id="pg-radio">Air Conditioner&nbsp;&nbsp;&nbsp;<input type="checkbox" name="ac" checked></div>
+            <% } %>
+            <% if (pg.AC == false){ %>
+                <div id="pg-radio">Air Conditioner&nbsp;&nbsp;&nbsp;<input type="checkbox" name="ac"></div>
+            <% } %>
+            
             <div id="pg-fields">Link to photos&nbsp;&nbsp;&nbsp;<input type="text" name="photos"></div>
-            <div id="pg-radio">Approved by pgHUB ADMIN&nbsp;&nbsp;&nbsp;<input type="checkbox" name="approval"></div>
+
+            <% if (pg.accepted == true){ %>
+                <div id="pg-radio">Approved by pgHUB ADMIN&nbsp;&nbsp;&nbsp;<input type="checkbox" name="approval" checked></div>
+            <% } %>
+            <% if (pg.accepted == false){ %>
+                <div id="pg-radio">Approved by pgHUB ADMIN&nbsp;&nbsp;&nbsp;<input type="checkbox" name="approval"></div>
+            <% } %>
+
             <button type="submit" id="login-submit" style="margin-top: 0;">Submit</button>
         </form>
     </div>

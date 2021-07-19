@@ -527,7 +527,7 @@ app.get("/adminLogin", function (req, res) {
             res.send("You must Logout first");
         }
     } else {
-        res.render("adminlogin", { message : message, meUser : -1 });
+        res.render("adminlogin", { message: message, meUser: -1 });
     }
 });
 
@@ -556,24 +556,35 @@ app.post("/adminlogin", function (req, res) {
             res.redirect("/adminlogin");
         }
     });
-
-
 });
 
 app.get("/admin", function (req, res) {
-    if (req.isAuthenticated()){
-        if (req.user.admin == true){
-            res.render("admin", { message: message, meUser: req.user.username });
+    if (req.isAuthenticated()) {
+        if (req.user.admin != undefined && req.user.admin == true) {
+            Pg.find({}, function(err, pgs){
+                res.render("admin", { message: message, meUser: req.user.username, pgs : pgs });
+            });
         } else {
             res.send("You are not an admin");
         }
     } else {
-        res.redirect("/adminlogin")
+        res.redirect("/adminlogin");
     }
 });
 
-app.get("/pgEdit", function (req, res) {
-    res.render("pgEdit", { message: message, meUser: -1 });
+app.get("/pgEdit/:pgname", function (req, res) {
+    const pgname = req.params.pgname;
+    if (req.isAuthenticated()) {
+        if (req.user.admin != undefined && req.user.admin == true) {
+            Pg.findOne({name : pgname}, function(err, pg){
+                res.render("pgEdit", { pg : pg, message: message, meUser: -1 });
+            });
+        } else {
+            res.send("You are not an admin");
+        }
+    } else {
+        res.redirect("/adminlogin");
+    }
 });
 
 app.listen(3000, function () {

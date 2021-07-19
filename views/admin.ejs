@@ -1,21 +1,28 @@
 <%- include('header'); %>
-<main>
-    <div id="admin-panel">
-        <div id="admin-add">
-            <h2>Add new PG</h2>
-            <div id="admin-add-icon">+</div>
-        </div>
-        <div id="admin-search">
-            <div id="admin-item">
-                <p> Name:&nbsp;&nbsp;&nbsp;
-                    Hostel
-                </p>
-                <div id="admin-remove">x</div>
+    <main>
+        <div id="admin-panel">
+            <div id="admin-add">
+                <h2>PGs</h2>
+                <div id="admin-add-icon">+</div>
+            </div>
+            <div id="admin-search">
+                <% pgs.forEach(function(pg){ %>
+                    <a href="/pgedit/<%= pg.name %>">
+                        <div id="admin-item">
+                            <p> Name:&nbsp;&nbsp;&nbsp;
+                                <%= pg.name %>
+                            </p>
+                            <% if (pg.accepted==true) { %>
+                                <p>Approved</p>
+                                <% } else {%>
+                                    <p>Not Approved</p>
+                                    <% } %>
+                                        <div id="admin-remove">x</div>
+                        </div>
+                    </a>
+                    <% }) %>
             </div>
         </div>
-    </div>
-</main>
+    </main>
 
-<%- include('footer'); -%>
-
-
+    <%- include('footer'); -%>
