@@ -587,6 +587,21 @@ app.get("/pgEdit/:pgname", function (req, res) {
     }
 });
 
+app.post("/pgedit", function(req, res){
+    var approved = false;
+    var nonveg = false;
+    var ac = false;
+    if (req.body.approval == "on") approved = true;
+    if (req.body.nonveg == "on") nonveg = true;
+    if (req.body.ac == "on") ac = true;
+
+    Pg.updateOne({name : req.body.name}, {$set : {latitude : req.body.latitude, longitude : req.body.longitude, price : req.body.price, city : req.body.city, nonveg : nonveg, ac : ac, accepted : approved}}, function(err, pg){
+        console.log(pg);
+        if (err) console.log(err);
+        else res.redirect("/admin");
+    });
+});
+
 app.listen(3000, function () {
     console.log("Server started at port http://localhost:3000/");
 });

@@ -4,9 +4,9 @@
         <div id="nav-logo">edit<span> PG</div>
     </div>
     <div id="newpg-form">
-        <form method="POST" action="/newpg">
-            <div id="pg-fields">Name &nbsp;&nbsp;&nbsp;<input type="text" value="<%= pg.name %>" name="name"></div>
-            <div id="pg-fields">Email&nbsp;&nbsp;&nbsp;<input type="text" value="<%= pg.email %>" disabled name="email"></div>
+        <form method="POST" action="/pgedit">
+            <div id="pg-fields">Name &nbsp;&nbsp;&nbsp;<input type="text" value="<%= pg.name %>" readonly name="name"></div>
+            <div id="pg-fields">Email&nbsp;&nbsp;&nbsp;<input type="text" value="<%= pg.email %>" readonly name="email"></div>
             <div id="pg-fields">City&nbsp;&nbsp;&nbsp;<input type="text" value="<%= pg.city %>" name="city"></div>
             <div id="pg-fields">Price(per Person/ for a year)&nbsp;&nbsp;&nbsp;<input type="number" value="<%= pg.price %>" name="price"
                     min="0"></div>
