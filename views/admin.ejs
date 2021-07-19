@@ -7,19 +7,21 @@
             </div>
             <div id="admin-search">
                 <% pgs.forEach(function(pg){ %>
-                    <a href="/pgedit/<%= pg.name %>">
-                        <div id="admin-item">
+                    <div id="admin-item">
+                        <a href="/pgedit/<%= pg.name %>">
                             <p> Name:&nbsp;&nbsp;&nbsp;
                                 <%= pg.name %>
                             </p>
                             <% if (pg.accepted==true) { %>
                                 <p>Approved</p>
-                                <% } else {%>
-                                    <p>Not Approved</p>
-                                    <% } %>
-                                        <div id="admin-remove">x</div>
-                        </div>
-                    </a>
+                            <% } else {%>
+                                <p>Not Approved</p>
+                            <% } %>
+                        </a>
+                        <a href="/delete/<%= pg.name %>">
+                            <div id="admin-remove">x</div>
+                        </a>
+                    </div>
                     <% }) %>
             </div>
         </div>

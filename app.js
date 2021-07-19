@@ -577,7 +577,7 @@ app.get("/pgEdit/:pgname", function (req, res) {
     if (req.isAuthenticated()) {
         if (req.user.admin != undefined && req.user.admin == true) {
             Pg.findOne({name : pgname}, function(err, pg){
-                res.render("pgEdit", { pg : pg, message: message, meUser: -1 });
+                res.render("pgEdit", { pg : pg, message: message, meUser: req.user.username });
             });
         } else {
             res.send("You are not an admin");
@@ -600,6 +600,22 @@ app.post("/pgedit", function(req, res){
         if (err) console.log(err);
         else res.redirect("/admin");
     });
+});
+
+app.get("/delete/:pgname", function(req, res){
+    if (req.isAuthenticated()){
+        if (req.user.admin != undefined && req.user.admin == true){
+            const pgname = req.params.pgname;
+            Pg.deleteOne({name : pgname}, function(err){
+                if (err) console.log(err);
+                res.redirect("/admin");
+            });
+        } else {
+            res.send("You're not an admin");
+        }
+    } else {
+        res.send("Please login as admin");
+    }
 });
 
 app.listen(3000, function () {
