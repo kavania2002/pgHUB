@@ -308,7 +308,7 @@ app.get("/user/:name", function (req, res) {
 // -------------------------------------- SEARCH/FILTER -----------------------------------------
 app.get("/search", function (req, res) {
     if (req.isAuthenticated()) {
-        Pg.find({}, function (err, pgs) {
+        Pg.find({ accepted: true }, function (err, pgs) {
             var cities = new Set();
             pgs.forEach(function (pg) {
                 cities.add(pg.city);
@@ -342,22 +342,22 @@ app.post("/search", function (req, res) {
                 }
 
                 if (cities != undefined && cities.length != 0) {
-                    Pg.find({ city: cities, avgRating: ratings, price: { $gte: p1, $lte: p2 } }, function (err, pgs) {
+                    Pg.find({ city: cities, avgRating: ratings, price: { $gte: p1, $lte: p2 }, accepted: true }, function (err, pgs) {
                         res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 } else {
-                    Pg.find({ avgRating: ratings, price: { $gte: p1, $lte: p2 } }, function (err, pgs) {
+                    Pg.find({ avgRating: ratings, price: { $gte: p1, $lte: p2 }, accepted: true }, function (err, pgs) {
                         res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 }
             } else {
                 if (cities != undefined && cities.length != 0) {
-                    Pg.find({ city: cities, price: { $gte: p1, $lte: p2 } }, function (err, pgs) {
+                    Pg.find({ city: cities, price: { $gte: p1, $lte: p2 }, accepted: true }, function (err, pgs) {
                         // console.log(pgs);
                         res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 } else {
-                    Pg.find({ price: { $gte: p1, $lte: p2 } }, function (err, pgs) {
+                    Pg.find({ price: { $gte: p1, $lte: p2 }, accepted: true }, function (err, pgs) {
                         res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 }
@@ -369,22 +369,22 @@ app.post("/search", function (req, res) {
                 }
 
                 if (cities != undefined && cities.length != 0) {
-                    Pg.find({ city: cities, avgRating: ratings }, function (err, pgs) {
+                    Pg.find({ city: cities, avgRating: ratings, accepted: true }, function (err, pgs) {
                         res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 } else {
-                    Pg.find({ avgRating: ratings }, function (err, pgs) {
+                    Pg.find({ avgRating: ratings, accepted: true }, function (err, pgs) {
                         res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 }
             } else {
                 if (cities != undefined && cities.length != 0) {
-                    Pg.find({ city: cities }, function (err, pgs) {
+                    Pg.find({ city: cities, accepted: true }, function (err, pgs) {
                         // console.log(pgs);
                         res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 } else {
-                    Pg.find(function (err, pgs) {
+                    Pg.find({ accepted: true }, function (err, pgs) {
                         res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 }
@@ -443,7 +443,7 @@ app.post("/newpg", function (req, res) {
 app.get("/pg/:pgName", function (req, res) {
     if (req.isAuthenticated()) {
         const pgName = req.params.pgName;
-        Pg.findOne({ name: pgName }, function (err, pg) {
+        Pg.findOne({ name: pgName, accepted: true }, function (err, pg) {
             if (pg == null) res.send("No such type of PG exists");
             else {
                 const mapURL = "https://embed.waze.com/iframe?zoom=13&lat=" + pg.latitude + "&lon=" + pg.longitude + "&pin=1";
@@ -496,17 +496,19 @@ app.post("/comment", function (req, res) {
                 { _id: comment.userId },
                 { $push: { commentIds: comme.id }, $inc: { totalRatings: 1 } }, function (err) {
                     if (err) console.log(err);
-                    else console.log("Successfully updated user");
-                });
-            Pg.findOneAndUpdate({ _id: comment.pgId },
-                { $push: { commentIds: comme.id }, $inc: { totalRatings: comme.score } }, function (err, result) {
-                    if (err) console.log(err);
                     else {
-                        console.log("Successfully updated in PG");
+                        console.log("Successfully updated user");
+                        Pg.findOneAndUpdate({ _id: comment.pgId },
+                            { $push: { commentIds: comme.id }, $inc: { totalRatings: comme.score } }, function (err, result) {
+                                if (err) console.log(err);
+                                else {
+                                    console.log("Successfully updated in PG");
+                                    res.redirect("/pg/" + pgName);
+                                }
+                            });
                     }
                 });
 
-            res.redirect("/pg/" + pgName);
         }
     })
 });
@@ -561,8 +563,8 @@ app.post("/adminlogin", function (req, res) {
 app.get("/admin", function (req, res) {
     if (req.isAuthenticated()) {
         if (req.user.admin != undefined && req.user.admin == true) {
-            Pg.find({}, function(err, pgs){
-                res.render("admin", { message: message, meUser: req.user.username, pgs : pgs });
+            Pg.find({}, function (err, pgs) {
+                res.render("admin", { message: message, meUser: req.user.username, pgs: pgs });
             });
         } else {
             res.send("You are not an admin");
@@ -576,8 +578,8 @@ app.get("/pgEdit/:pgname", function (req, res) {
     const pgname = req.params.pgname;
     if (req.isAuthenticated()) {
         if (req.user.admin != undefined && req.user.admin == true) {
-            Pg.findOne({name : pgname}, function(err, pg){
-                res.render("pgEdit", { pg : pg, message: message, meUser: req.user.username });
+            Pg.findOne({ name: pgname }, function (err, pg) {
+                res.render("pgEdit", { pg: pg, message: message, meUser: req.user.username });
             });
         } else {
             res.send("You are not an admin");
@@ -587,7 +589,7 @@ app.get("/pgEdit/:pgname", function (req, res) {
     }
 });
 
-app.post("/pgedit", function(req, res){
+app.post("/pgedit", function (req, res) {
     var approved = false;
     var nonveg = false;
     var ac = false;
@@ -595,18 +597,18 @@ app.post("/pgedit", function(req, res){
     if (req.body.nonveg == "on") nonveg = true;
     if (req.body.ac == "on") ac = true;
 
-    Pg.updateOne({name : req.body.name}, {$set : {latitude : req.body.latitude, longitude : req.body.longitude, price : req.body.price, city : req.body.city, nonveg : nonveg, ac : ac, accepted : approved}}, function(err, pg){
+    Pg.updateOne({ name: req.body.name }, { $set: { latitude: req.body.latitude, longitude: req.body.longitude, price: req.body.price, city: req.body.city, nonveg: nonveg, ac: ac, accepted: approved } }, function (err, pg) {
         console.log(pg);
         if (err) console.log(err);
         else res.redirect("/admin");
     });
 });
 
-app.get("/delete/:pgname", function(req, res){
-    if (req.isAuthenticated()){
-        if (req.user.admin != undefined && req.user.admin == true){
+app.get("/delete/:pgname", function (req, res) {
+    if (req.isAuthenticated()) {
+        if (req.user.admin != undefined && req.user.admin == true) {
             const pgname = req.params.pgname;
-            Pg.deleteOne({name : pgname}, function(err){
+            Pg.deleteOne({ name: pgname }, function (err) {
                 if (err) console.log(err);
                 res.redirect("/admin");
             });
