@@ -30,11 +30,17 @@
     <nav>
         <div id="nav-logo">pg<span>HUB</div>
         <div id="nav-links">
-            <a href="#">About Us</a>
+            <a href="#FO">About Us</a>
 
-            <% if (meUser==-1) { %>
+            <% if (meUser.admin==true) { %>
+                <a href="/admin">ADmin Panel</a>
+                <% } else { %>
+                    <% } %>    
+                <% if (meUser==-1) { %>
                 <a href="/login">Login</a>
                 <% } else { %>
+                    <a href="/newpg">Add new PG</a>
+                    <a href="/search">Search</a>
                     <a href="/user/<%= meUser %>">
                         <%= meUser %>
                     </a>

@@ -3,14 +3,14 @@
         <div id="admin-panel">
             <div id="admin-add">
                 <h2>PGs</h2>
-                <a href="/newpg">
+                <a href="/newpg" style="text-decoration: none;">
                     <div id="admin-add-icon">+</div>
                 </a>
             </div>
             <div id="admin-search">
                 <% pgs.forEach(function(pg){ %>
                     <div id="admin-item">
-                        <a href="/pgedit/<%= pg.name %>">
+                        <a href="/pgedit/<%= pg.name %>" style="text-decoration: none; color:#fff;">
                             <p> Name:&nbsp;&nbsp;&nbsp;
                                 <%= pg.name %>
                             </p>
@@ -20,7 +20,7 @@
                                 <p>Not Approved</p>
                             <% } %>
                         </a>
-                        <a href="/delete/<%= pg.name %>">
+                        <a href="/delete/<%= pg.name %>" style="text-decoration: none;">
                             <div id="admin-remove">x</div>
                         </a>
                     </div>
