@@ -419,6 +419,7 @@ app.post("/newpg", function (req, res) {
             price: req.body.price.trim(),
             nonveg: nonveg,
             AC: ac,
+            photos : req.body.photos.trim(),
             totalRatings: 0,
             accepted: false,
             photos: req.body.photos.trim(),
@@ -597,7 +598,7 @@ app.post("/pgedit", function (req, res) {
     if (req.body.nonveg == "on") nonveg = true;
     if (req.body.ac == "on") ac = true;
 
-    Pg.updateOne({ name: req.body.name }, { $set: { latitude: req.body.latitude, longitude: req.body.longitude, price: req.body.price, city: req.body.city, nonveg: nonveg, ac: ac, accepted: approved } }, function (err, pg) {
+    Pg.updateOne({ name: req.body.name }, { $set: { latitude: req.body.latitude, longitude: req.body.longitude, price: req.body.price, city: req.body.city, photos : req.body.photos, nonveg: nonveg, ac: ac, accepted: approved } }, function (err, pg) {
         console.log(pg);
         if (err) console.log(err);
         else res.redirect("/admin");
