@@ -41,8 +41,8 @@
                 <% } else { %>
                     <a href="/newpg">Add new PG</a>
                     <a href="/search">Search</a>
-                    <a href="/user/<%= meUser %>">
-                        <%= meUser %>
+                    <a href="/user/<%= meUser.username %>">
+                        <%= meUser.username.split('@')[0] %>
                     </a>
                     <a href="/logout">Logout</a>
                     <% } %>

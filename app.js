@@ -268,7 +268,7 @@ app.post("/register", function (req, res) {
 // --------------------------------------- USERS -------------------------------------------------
 app.get("/user/:name", function (req, res) {
     const userName = req.params.name;
-    var meUser;
+    var meUser = -1;
     // console.log(userName);
     User.findOne({ username: userName }, function (err, user) {
         // console.log(user);
@@ -277,7 +277,7 @@ app.get("/user/:name", function (req, res) {
         } else {
             if (user != null) {
                 if (req.isAuthenticated()) {
-                    meUser = req.user.username;
+                    meUser = req.user;
                     var comments = new Array();
                     for (let index = 0; index < user.commentIds.length; index++) {
                         const comId = user.commentIds[index];
@@ -314,7 +314,7 @@ app.get("/search", function (req, res) {
                 cities.add(pg.city);
             });
             console.log(cities);
-            res.render("search", { meUser: req.user.username, pgs: pgs, cities: cities, dikhaneKa: 0 });
+            res.render("search", { meUser: req.user, pgs: pgs, cities: cities, dikhaneKa: 0 });
         });
 
     } else {
@@ -343,22 +343,22 @@ app.post("/search", function (req, res) {
 
                 if (cities != undefined && cities.length != 0) {
                     Pg.find({ city: cities, avgRating: ratings, price: { $gte: p1, $lte: p2 }, accepted: true }, function (err, pgs) {
-                        res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                        res.render("search", { meUser: req.user, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 } else {
                     Pg.find({ avgRating: ratings, price: { $gte: p1, $lte: p2 }, accepted: true }, function (err, pgs) {
-                        res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                        res.render("search", { meUser: req.user, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 }
             } else {
                 if (cities != undefined && cities.length != 0) {
                     Pg.find({ city: cities, price: { $gte: p1, $lte: p2 }, accepted: true }, function (err, pgs) {
                         // console.log(pgs);
-                        res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                        res.render("search", { meUser: req.user, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 } else {
                     Pg.find({ price: { $gte: p1, $lte: p2 }, accepted: true }, function (err, pgs) {
-                        res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                        res.render("search", { meUser: req.user, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 }
             }
@@ -370,22 +370,22 @@ app.post("/search", function (req, res) {
 
                 if (cities != undefined && cities.length != 0) {
                     Pg.find({ city: cities, avgRating: ratings, accepted: true }, function (err, pgs) {
-                        res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                        res.render("search", { meUser: req.user, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 } else {
                     Pg.find({ avgRating: ratings, accepted: true }, function (err, pgs) {
-                        res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                        res.render("search", { meUser: req.user, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 }
             } else {
                 if (cities != undefined && cities.length != 0) {
                     Pg.find({ city: cities, accepted: true }, function (err, pgs) {
                         // console.log(pgs);
-                        res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                        res.render("search", { meUser: req.user, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 } else {
                     Pg.find({ accepted: true }, function (err, pgs) {
-                        res.render("search", { meUser: req.user.username, pgs: pgs, cities: citiess, dikhaneKa: -1 });
+                        res.render("search", { meUser: req.user, pgs: pgs, cities: citiess, dikhaneKa: -1 });
                     });
                 }
             }
@@ -398,7 +398,7 @@ app.post("/search", function (req, res) {
 // ------------------------------------ Application for NEwPG ------------------------------------
 app.get("/newpg", function (req, res) {
     if (req.isAuthenticated()) {
-        res.render("newpg", { meUser: req.user.username });
+        res.render("newpg", { meUser: req.user });
     } else {
         res.redirect("/login");
     }
@@ -461,13 +461,13 @@ app.get("/pg/:pgName", function (req, res) {
                             pg.avgRating = Math.round(totalRatingCount / pg.commentIds.length);
                             pg.save(function (err) {
                                 if (err) console.log(err);
-                                else res.render("pg", { meUser: req.user.username, pg: pg, mapURL: mapURL, comments: comments });
+                                else res.render("pg", { meUser: req.user, pg: pg, mapURL: mapURL, comments: comments });
                             })
                         }
                     });
                 }
                 if (pg.commentIds.length == 0) {
-                    res.render("pg", { meUser: req.user.username, pg: pg, mapURL: mapURL, comments: comments, avgRating: "Not Rated" });
+                    res.render("pg", { meUser: req.user, pg: pg, mapURL: mapURL, comments: comments, avgRating: "Not Rated" });
                 }
             }
         });
@@ -524,7 +524,7 @@ app.get("/logout", function (req, res) {
 app.get("/adminLogin", function (req, res) {
     if (req.isAuthenticated()) {
         if (req.user.admin == true) {
-            res.render("adminLogin", { message: message, meUser: req.username });
+            res.render("adminLogin", { message: message, meUser: req.user });
         } else {
             res.send("You must Logout first");
         }
@@ -564,7 +564,7 @@ app.get("/admin", function (req, res) {
     if (req.isAuthenticated()) {
         if (req.user.admin != undefined && req.user.admin == true) {
             Pg.find({}, function (err, pgs) {
-                res.render("admin", { message: message, meUser: req.user.username, pgs: pgs });
+                res.render("admin", { message: message, meUser: req.user, pgs: pgs });
             });
         } else {
             res.send("You are not an admin");
@@ -579,7 +579,7 @@ app.get("/pgEdit/:pgname", function (req, res) {
     if (req.isAuthenticated()) {
         if (req.user.admin != undefined && req.user.admin == true) {
             Pg.findOne({ name: pgname }, function (err, pg) {
-                res.render("pgEdit", { pg: pg, message: message, meUser: req.user.username });
+                res.render("pgEdit", { pg: pg, message: message, meUser: req.user });
             });
         } else {
             res.send("You are not an admin");
