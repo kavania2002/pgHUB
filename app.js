@@ -104,7 +104,7 @@ passport.deserializeUser(function (id, done) {
 passport.use(new Strategy({
     clientID: process.env.GCLIENT_ID,
     clientSecret: process.env.GCLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/pgHUB",
+    callbackURL: "https://pghub1.herokuapp.com/auth/google/pgHUB",
     userProfileURL: "https://www.googleapis.com/oauth2/v2/userinfo"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -135,7 +135,7 @@ passport.use(new Strategy({
 passport.use(new facebook.Strategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/auth/facebook/pgHUB"
+    callbackURL: "https://pghub1.herokuapp.com/auth/facebook/pgHUB"
 },
     function (accessToken, refreshToken, profile, done) {
         User.findOne({ "facebookId": profile.id }, function (err, user) {
