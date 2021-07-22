@@ -38,7 +38,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb://localhost:27017/pgHUB", { useCreateIndex: true, useUnifiedTopology: true, useNewUrlParser: true });
+mongoose.connect("mongodb+srv://admin-kavan:" + process.env.MONGOPASSW + "@cluster0.fcig4.mongodb.net/pgHUB", { useCreateIndex: true, useUnifiedTopology: true, useNewUrlParser: true });
 
 const userSchema = new mongoose.Schema({
     username: String,
