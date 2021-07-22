@@ -203,7 +203,7 @@ app.get("/login", function (req, res) {
         if (message != "") {
             alert(message);
         }
-        res.render("/login.ejs", { message: message, meUser: -1 });
+        res.render("login", { message: message, meUser: -1 });
         message = "";
     }
 });
