@@ -25,7 +25,7 @@ const app = express();
 
 app.set("view engine", "ejs");
 app.use(urlencoded({ extended: true }));
-app.use(express.static(__dirname + "/public/"));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 
 app.use(session({
