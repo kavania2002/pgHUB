@@ -530,10 +530,10 @@ app.get("/logout", function (req, res) {
 
 
 // ------------------------------------------- Admin -----------------------------------------------------
-app.get("/adminLogin", function (req, res) {
+app.get("/adminlogin", function (req, res) {
     if (req.isAuthenticated()) {
         if (req.user.admin == true) {
-            res.render("adminLogin", { message: message, meUser: req.user });
+            res.render("adminlogin", { message: message, meUser: req.user });
         } else {
             res.send("You must Logout first");
         }
@@ -583,12 +583,12 @@ app.get("/admin", function (req, res) {
     }
 });
 
-app.get("/pgEdit/:pgname", function (req, res) {
+app.get("/pgedit/:pgname", function (req, res) {
     const pgname = req.params.pgname;
     if (req.isAuthenticated()) {
         if (req.user.admin != undefined && req.user.admin == true) {
             Pg.findOne({ name: pgname }, function (err, pg) {
-                res.render("pgEdit", { pg: pg, message: message, meUser: req.user });
+                res.render("pgedit", { pg: pg, message: message, meUser: req.user });
             });
         } else {
             res.send("You are not an admin");
