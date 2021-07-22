@@ -251,7 +251,7 @@ app.post("/register", function (req, res) {
                 response.on("data", function (data) {
                     const addressData = JSON.parse(data);
                     var locality;
-                    if (addressData.error.code == "validation_error") {
+                    if (addressData.error != undefined || addressData.error != null) {
                         locality = "No Idea";
                     } else {
                         locality = addressData.data[0].county;
