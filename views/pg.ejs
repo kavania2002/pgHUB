@@ -9,8 +9,20 @@
                     <%= pg.city %>
                 </p>
                 <p>Rs. <%= pg.price %> for one person annually</p>
-                <!-- <p><i class="fas fa-air-conditioner"></i></p> -->
-                <!-- <p><i class="fas fa-meat"></i></p> -->
+                
+                <% if (pg.AC == true) { %>
+                    <p>AC</p>
+                <% } %>
+                <% if (pg.AC == false){ %>
+                    <p>Non Ac</p>
+                <% } %>
+                    
+                <% if (pg.nonveg == true){ %>
+                    <p>Non-Veg</p>
+                <% } %>
+                <% if (pg.nonveg == false){ %>
+                    <p>Pure-Veg</p>
+                <% } %>
                 <p id="latit" hidden>
                     <%= pg.latitude %>
                 </p>
